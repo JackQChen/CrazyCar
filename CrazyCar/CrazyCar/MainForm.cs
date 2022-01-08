@@ -1,0 +1,180 @@
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO.Ports;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using WebSocketSharp;
+using WebSocketSharp.Net;
+using WebSocketSharp.Server;
+
+namespace CrazyCar
+{
+    public partial class MainForm : Form
+    {
+        HttpServer server;
+        SerialPort serialPort;
+        BlockingCollection<byte[]> sendQueue = new BlockingCollection<byte[]>();
+        Action<string> actLog;
+        Action<string> actSendToBrowser;
+
+        public MainForm()
+        {
+            InitializeComponent();
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            actLog = new Action<string>(log =>
+            {
+                this.txtLog.AppendText(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "\r\n" + log + "\r\n");
+            });
+            Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    try
+                    {
+                        var btData = sendQueue.Take();
+                        //if (!serialPort.IsOpen)
+                        //{
+                        //    Thread.Sleep(1000);
+                        //    continue;
+                        //}
+                        Log("send:" + btData[0].ToString());
+                        //serialPort.Write(btData, 0, btData.Length);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log(ex.StackTrace + "\r\n" + ex.Message);
+                    }
+                }
+            });
+            Task.Factory.StartNew(() =>
+            {
+                byte[] btArr = new byte[1024];
+                var count = 0;
+                var str = "";
+                while (true)
+                {
+                    try
+                    {
+                        if (!serialPort.IsOpen)
+                        {
+                            Thread.Sleep(1000);
+                            continue;
+                        }
+                        count = serialPort.BytesToRead;
+                        if (count > 0)
+                        {
+                            serialPort.Read(btArr, 0, count);
+                            str = Encoding.UTF8.GetString(btArr, 0, count);
+                            Log("recv:" + str);
+                            if (actSendToBrowser != null)
+                                actSendToBrowser(str);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log(ex.StackTrace + "\r\n" + ex.Message);
+                    }
+                }
+            });
+            try
+            {
+                serialPort = new SerialPort("/dev/ttyAMA0", 9600);
+                serialPort.Open();
+            }
+            catch
+            {
+                Log("SerialPort init failed");
+            }
+            server = new HttpServer(9527);
+            server.DocumentRootPath = AppDomain.CurrentDomain.BaseDirectory;
+            server.OnGet += (s, a) =>
+            {
+                var req = a.Request;
+                var res = a.Response;
+                var path = req.RawUrl;
+                if (path == "/")
+                    path += "index.html";
+                byte[] contents;
+                if (!a.TryReadFile(path, out contents))
+                {
+                    res.StatusCode = (int)HttpStatusCode.NotFound;
+                    return;
+                }
+                if (path.EndsWith(".html"))
+                {
+                    res.ContentType = "text/html";
+                    res.ContentEncoding = Encoding.UTF8;
+                }
+                else if (path.EndsWith(".js"))
+                {
+                    res.ContentType = "application/javascript";
+                    res.ContentEncoding = Encoding.UTF8;
+                }
+                res.WriteContent(contents);
+            };
+            server.AddWebSocketService<Service>("/", service =>
+            {
+                service.SendToDevice = btArr =>
+                {
+                    SendControl(btArr);
+                };
+                actSendToBrowser = btArr =>
+                {
+                    service.SendToBrowser(btArr);
+                };
+                Log("WebSocket connected.");
+            });
+            server.Start();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            serialPort.Close();
+            server.Stop();
+        }
+
+        void Log(string log)
+        {
+            this.txtLog.Invoke(actLog, log);
+        }
+
+        public void SendData(byte[] btData)
+        {
+            sendQueue.Add(btData);
+        }
+
+        public void SendControl(byte[] btData)
+        {
+            SendData(btData);
+        }
+
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+            //var btList = Encoding.UTF8.GetBytes(this.txtData.Text + "\r\n").ToList();
+            var btList = new List<byte>() {
+                0xfd,//head
+                (byte)'a',//cmd
+                (byte)'b',//tx
+                (byte)'c',//rx
+                0,//res
+                0,//res1
+                12,//len
+                0,//placeholder
+                1,2,3,4,5,6,7,100,100,//data
+                0,//sumcheck
+                0xeb//tail
+            };
+            var bsum = btList.Where((b, i) => i < btList.Count - 2).ToArray();
+            btList[btList.Count - 2] = (byte)bsum.Sum(b => b);
+            SendData(btList.ToArray());
+        }
+    }
+}

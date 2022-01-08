@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>
+        Controller
+    </title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <script language="javascript" type="text/javascript">
+        var webSocket;
+        var _reconnect;
+        var uri = "192.168.1.10:9527";
+        function init() {
+            websocket = new WebSocket("ws://" + uri);
+            websocket.onopen = function (evt) {
+                clearInterval(_reconnect);
+                console.log("CONNECTED");
+            };
+            websocket.onclose = function (evt) {
+                console.log("DISCONNECTED");
+            };
+            websocket.onmessage = function (evt) {
+                document.getElementById('txtLog').innerHTML = evt.data;
+            };
+            websocket.onerror = function (evt) {
+                console.log('ERROR:' + evt.data);
+            };
+        }
+        function reconnect() {
+            _reconnect = setInterval(function () {
+                if (websocket.readyState != WebSocket.OPEN)
+                    init();
+            }, 10000);
+        }
+    </script>
+    <style>
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        html, body {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 0;
+            margin: 0;
+            overflow: scroll;
+            overflow-x: hidden;
+            font-size: 25px;
+        }
+
+        #left {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 50%;
+        }
+
+        #right {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 50%;
+        }
+
+        #nipple_0_0 .back {
+            width: 30px !important;
+            height: 200px !important;
+            margin-left: 0px !important;
+            margin-top: -100px !important;
+            border-radius: 10% !important;
+        }
+
+        #nipple_0_0 .front {
+            width: 60px !important;
+            height: 100px !important;
+            margin-left: -15px !important;
+            margin-top: -50px !important;
+            border-radius: 20% !important;
+            opacity: 1 !important;
+        }
+
+        #nipple_1_1 .back {
+            width: 30px !important;
+            height: 200px !important;
+            margin-left: 0px !important;
+            margin-top: -100px !important;
+            border-radius: 10% !important;
+        }
+
+        #nipple_1_1 .front {
+            width: 60px !important;
+            height: 100px !important;
+            margin-left: -15px !important;
+            margin-top: -50px !important;
+            border-radius: 20% !important;
+            opacity: 1 !important;
+        }
+
+        input {
+            position: absolute;
+            left: -9999px;
+        }
+
+            input:checked + .slider::before {
+                box-shadow: 0 0.08em 0.15em -0.1em rgba(0, 0, 0, 0.5) inset, 0 0.05em 0.08em -0.01em rgba(255, 255, 255, 0.7), 3em 0 0 0 rgba(68, 204, 102, 0.7) inset;
+            }
+
+            input:checked + .slider::after {
+                left: 3em;
+            }
+
+        .slider {
+            -webkit-tap-highlight-color: rgba(255,0,0,0);
+            position: relative;
+            display: block;
+            width: 5.5em;
+            height: 3em;
+            cursor: pointer;
+            border-radius: 1.5em;
+            transition: 350ms;
+            background: linear-gradient(rgba(0, 0, 0, 0.07), rgba(255, 255, 255, 0)), #ddd;
+            box-shadow: 0 0.07em 0.1em -0.1em rgba(0, 0, 0, 0.4) inset, 0 0.05em 0.08em -0.01em rgba(255, 255, 255, 0.7);
+        }
+
+            .slider::before {
+                position: absolute;
+                content: '';
+                width: 4em;
+                height: 1.5em;
+                top: 0.75em;
+                left: 0.75em;
+                border-radius: 0.75em;
+                transition: 250ms ease-in-out;
+                background: linear-gradient(rgba(0, 0, 0, 0.07), rgba(255, 255, 255, 0.1)), #d0d0d0;
+                box-shadow: 0 0.08em 0.15em -0.1em rgba(0, 0, 0, 0.5) inset, 0 0.05em 0.08em -0.01em rgba(255, 255, 255, 0.7), 0 0 0 0 rgba(68, 204, 102, 0.7) inset;
+            }
+
+            .slider::after {
+                position: absolute;
+                content: '';
+                width: 2em;
+                height: 2em;
+                top: 0.5em;
+                left: 0.5em;
+                border-radius: 50%;
+                transition: 250ms ease-in-out;
+                background: linear-gradient(#f5f5f5 10%, #eeeeee);
+                box-shadow: 0 0.1em 0.15em -0.05em rgba(255, 255, 255, 0.9) inset, 0 0.2em 0.2em -0.12em rgba(0, 0, 0, 0.5);
+            }
+
+        .menu {
+            padding: 5px 0;
+            width: 25px;
+            height: 3px;
+            background: #bcbcbc;
+            background-clip: content-box;
+            border-top: 3px solid #bcbcbc;
+            border-bottom: 3px solid #bcbcbc;
+            margin: 40px 0 0 18px;
+        }
+    </style>
+</head>
+
+<body onload="init();reconnect();">
+    <div id="left">
+    </div>
+    <div id="right">
+    </div>
+    <script src="nipplejs.min.js">
+    </script>
+    <script>
+        var posData = {
+            l: 0,
+            r: 0
+        };
+        var lastData = {
+            l: 0,
+            r: 0
+        };
+        setInterval(function () {
+            if (websocket.readyState == WebSocket.OPEN) {
+                posData.l = parseInt(posData.l);
+                posData.r = parseInt(posData.r);
+                if (Math.abs(lastData.l - posData.l) > 0 || Math.abs(lastData.r - posData.r) > 0) {
+                    lastData.l = posData.l;
+                    lastData.r = posData.r;
+                    websocket.send(JSON.stringify(posData));
+                }
+            }
+        },
+            50);
+        var joystickL = nipplejs.create({
+            zone: document.getElementById('left'),
+            mode: 'static',
+            position: {
+                left: '25%',
+                top: '65%'
+            },
+            color: '#d0d0d0',
+            restOpacity: 1,
+            size: 100,
+            lockY: true
+        });
+        var nodeL = document.createElement("div");
+        nodeL.innerHTML = "<div class='menu'></div>";
+        joystickL[0].el.lastElementChild.append(nodeL);
+
+        var joystickR = nipplejs.create({
+            zone: document.getElementById('right'),
+            mode: 'static',
+            position: {
+                left: '70%',
+                top: '65%'
+            },
+            color: '#d0d0d0',
+            restOpacity: 1,
+            size: 100,
+            lockY: true
+        });
+        var nodeR = document.createElement("div");
+        nodeR.innerHTML = "<div class='menu'></div>";
+        joystickR[0].el.lastElementChild.append(nodeR);
+
+        joystickL.on('end',
+            function (evt, data) {
+                posData.l = 0;
+            }).on('move',
+                function (evt, data) {
+                    posData.l = (data.vector.y > 0 ? 1 : -1) * data.distance;
+                });
+        joystickR.on('end',
+            function (evt, data) {
+                posData.r = 0;
+            }).on('move',
+                function (evt, data) {
+                    posData.r = (data.vector.y > 0 ? 1 : -1) * data.distance;
+                });
+    </script>
+    <div style="
+        position: fixed;
+        top: 5%;
+        left: 5%;">
+        <div id="txtLog">
+        </div>
+    </div>
+    <div style="position: fixed;top: 10%;width: 100%;display: flex;justify-content: center;">
+        <span style="float:left;margin:21px">
+            灯光
+        </span>
+        <input type="checkbox" id="chkLight">
+        <label style="float:left" class="slider" for="chkLight">
+        </label>
+    </div>
+</body>
+
+</html>
