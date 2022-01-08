@@ -52,12 +52,7 @@ int main()
 			SysParam.ConnectTimeCnt = 0;				//清定时计数值
 			SysParam.RemoteConnectState = 1;			//遥控已经连接	
 			Uart.RxState = UART_RX_READY;
-
-			cmdBluetoothData();
-			UpdateKeyHandleValue();
-			if (BluetoothKeyHandle.KeyNum == L_LEFT_UP)	SysParam.RemoteCarRunMode = REMOTE_CAR_RUN_MODE_FREE;
-			if (BluetoothKeyHandle.KeyNum == R_RIGHT_UP)	SysParam.RemoteCarRunMode = REMOTE_CAR_RUN_MODE_REMOTE;
-			//UartSendData(pProtocolData,MAX_UART_DATA_LEN);
+			
 		}
 
 		if (SysParam.ConnectTimeCnt >= 10)
@@ -88,8 +83,8 @@ int main()
 		up_angle();			//更新姿态,如果更换了mpu6050，请在这里面校准		
 		//发给匿名上位机，实时查看姿态
 		//usart2_report_imu((int)(S_Roll*100),(int)(10),(int)(10),0,0,0,(int)(S_Roll*100),(int)(100),(int)(10));	
-		if (Mcount % 100 == 0)
-			printf("Pitch:%3.2f\n",S_Pitch);
+		//if (Mcount % 100 == 0)
+		//	printf("Pitch:%3.2f\n",S_Pitch);
 		//serial2_send_char('b');
 		//printf("Sroll:%3.2f\r\n",S_Roll);	
 

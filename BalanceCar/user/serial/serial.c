@@ -5,6 +5,7 @@
 
 strUart Uart;
 strProtocol	ProtocolData;
+char dataArray[255];
 u8* pProtocolData = (u8*)&ProtocolData;
 
 
@@ -251,21 +252,18 @@ void USART1_IRQHandler(void)
 	USART_ClearFlag(USART1, USART_FLAG_TC);
 	if (USART_GetITStatus(USART1, USART_IT_RXNE) != Bit_RESET)//检查指定的USART中断发生与否
 	{
-		pProtocolData[Uart.RxCnt] = USART_ReceiveData(USART1);//USART_ReceiveData(USART1);
-
-		if ((pProtocolData[Uart.RxCnt] == FRAME_TAIL) && (pProtocolData[0] == FRAME_HEAD))
+		dataArray[Uart.RxCnt] = USART_ReceiveData(USART1);
+		if (dataArray[Uart.RxCnt] == '\n')
 		{
+			BluetoothKeyHandle.Handle.Ch1Value = dataArray[0];
+			BluetoothKeyHandle.Handle.Ch2Value = dataArray[1];
 			Uart.RxCnt = 0;
 			Uart.RxState = UART_RX_OK;
 		}
-		else if (pProtocolData[0] == 0XFD)
-		{
-			//SBUF = Uart.DataBuff[Uart.RxCnt];
+		else
 			Uart.RxCnt++;
-		}
-		else Uart.RxCnt = 0;
-
-		if (Uart.RxCnt > MAX_UART_DATA_LEN) Uart.RxCnt = 0;
+		if (Uart.RxCnt > 255)
+			Uart.RxCnt = 0;
 	}
 }
 

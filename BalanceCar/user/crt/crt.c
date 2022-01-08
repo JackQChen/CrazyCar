@@ -98,94 +98,6 @@ int clr_speed(int moto1, int moto2)
 	return out;
 }
 
-
-////蓝牙控制
-//static void ble_crt(char flag)
-//{	
-//	//速度和转向的大小
-//	short speed = 2000;
-//	short trun  = 2000;	
-//	static  u16 speed_count=0;
-//	
-//	switch(flag)
-//	{
-//		//停止
-//		case 0x30:
-//			{
-//				//停止时，转向和速度均为0
-//				CtrParam.TurnSpeed=0;
-//				CtrParam.RunSpeed=0;
-//				up_kp=310.0;
-//				speed_kp=1.5;
-//				bizhang_state = 0;
-//				genshui_state = 0;
-//				if(speed_count<100)
-//				{
-//					cha1=0;
-//					speed_count++;
-//				}
-//				//一段时间后进入速度i调节
-//				if(speed_count==100)
-//				{
-//					cha1=0;
-//					// speed_count=101;
-//					//speed_ki=0.008;
-//				}
-//			}
-//			break;
-//		//前
-//		case 0x31:
-//			{
-//				cha1=0;
-//				//speed_ki=0;
-//				speed_count=0;
-//				CtrParam.RunSpeed=speed;
-//			}
-//			break;
-//		
-//		//后
-//		case 0x32:
-//			{
-//				cha1=0;
-//				//speed_ki=0;
-//				speed_count=0;
-//				CtrParam.RunSpeed=-speed;
-//			}
-//			break;
-//		//左
-//		case 0x33:
-//			{
-//				//	speed_kp=5;
-//				CtrParam.TurnSpeed= trun;
-//				//up_kp=110.0;
-//			}
-//			break;
-//		//右
-//		case 0x34:
-//			{
-//				//speed_kp=5;
-//				CtrParam.TurnSpeed=-trun;
-//				//up_kp=110.0;
-//			}
-//			break;
-//		//壁障模式
-//		case 0x35:
-//			{
-//				bizhang_state = 1;
-//				//printf("开启壁障\r\n");
-//			}
-//			break;
-//		//跟随模式
-//		case 0x36:
-//			{
-//				genshui_state = 1;
-//				//printf("开启跟随\r\n");
-//			}
-//			break;	
-//	}		
-//}
-
-
 //超声波控制
 void csb_crt()
 {
@@ -268,21 +180,8 @@ void crt()
 	angle_out = up_right(S_Pitch);	//角度控制
 	speed_out = clr_speed(CtrParam.MotorSpeed_L, CtrParam.MotorSpeed_R);//速度控制
 	trun_out = clr_trun(Zgyro);//转向控制
-
-	if (SysParam.RemoteMode == REMOTE_MODE_REMOTE)
-	{
-		if (Remote.pitch > 1500)
-		{
-			CtrParam.MotorSpeed_L = angle_out + speed_out - trun_out;
-			CtrParam.MotorSpeed_R = angle_out + speed_out;// - trun_out;			
-		}
-		else
-		{
-			CtrParam.MotorSpeed_L = angle_out + speed_out;// + trun_out;
-			CtrParam.MotorSpeed_R = angle_out + speed_out - trun_out;
-		}
-	}
-	else if (SysParam.RemoteMode == REMOTE_MODE_APP)
+	
+	if (SysParam.RemoteMode == REMOTE_MODE_APP)
 	{
 		if (BluetoothKeyHandle.Handle.Ch3Value > 100)
 		{
@@ -295,42 +194,8 @@ void crt()
 			CtrParam.MotorSpeed_R = angle_out + speed_out - trun_out;
 		}
 	}
-
-
-	//	if(Remote.pitch > 1500)
-	//	{	
-	//		speed_l = angle_out + speed_out - trun_out;
-	//		speed_r = angle_out + speed_out;// - trun_out;	
-	//		if(speed_l * speed_r > 0)
-	//		{
-	//			CtrParam.MotorSpeed_L = speed_l;
-	//			CtrParam.MotorSpeed_R = speed_r;
-	//		}else
-	//		{
-	//			CtrParam.MotorSpeed_L = angle_out + speed_out;// - trun_out;
-	//			CtrParam.MotorSpeed_R = angle_out + speed_out;// - trun_out;				
-	//		}
-	////		CtrParam.MotorSpeed_L = angle_out + speed_out - trun_out;
-	////		CtrParam.MotorSpeed_R = angle_out + speed_out;// - trun_out;	
-	//			
-	//	}else
-	//	{
-	//		speed_l = angle_out + speed_out;// - trun_out;
-	//		speed_r = angle_out + speed_out - trun_out;	
-	//		if(speed_l * speed_r > 0)
-	//		{
-	//			CtrParam.MotorSpeed_L = speed_l;
-	//			CtrParam.MotorSpeed_R = speed_r;
-	//		}else
-	//		{
-	//			CtrParam.MotorSpeed_L = angle_out + speed_out;// - trun_out;
-	//			CtrParam.MotorSpeed_R = angle_out + speed_out;// - trun_out;				
-	//		}		
-	////		CtrParam.MotorSpeed_L = angle_out + speed_out;//  + trun_out;
-	////		CtrParam.MotorSpeed_R = angle_out + speed_out - trun_out;	
-	//	}
-
-		//限制速度
+	
+	//限制速度
 	CtrParam.MotorSpeed_L = limit_speed_out(CtrParam.MotorSpeed_L, 6000);
 	CtrParam.MotorSpeed_R = limit_speed_out(CtrParam.MotorSpeed_R, 6000);
 	if (S_Pitch<0.1 && S_Pitch>-0.1)

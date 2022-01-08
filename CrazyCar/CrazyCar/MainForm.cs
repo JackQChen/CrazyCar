@@ -39,13 +39,8 @@ namespace CrazyCar
                     try
                     {
                         var btData = sendQueue.Take();
-                        //if (!serialPort.IsOpen)
-                        //{
-                        //    Thread.Sleep(1000);
-                        //    continue;
-                        //}
-                        Log("send:" + btData[0].ToString());
-                        //serialPort.Write(btData, 0, btData.Length);
+                        serialPort.Write(btData, 0, btData.Length);
+                        Log("send:" + BitConverter.ToString(btData).Replace("-", " "));
                     }
                     catch (Exception ex)
                     {
@@ -168,22 +163,11 @@ namespace CrazyCar
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            //var btList = Encoding.UTF8.GetBytes(this.txtData.Text + "\r\n").ToList();
             var btList = new List<byte>() {
-                0xfd,//head
-                (byte)'a',//cmd
-                (byte)'b',//tx
-                (byte)'c',//rx
-                0,//res
-                0,//res1
-                12,//len
-                0,//placeholder
-                1,2,3,4,5,6,7,100,100,//data
-                0,//sumcheck
-                0xeb//tail
+                12,
+                25,
+                (int)'\n'
             };
-            var bsum = btList.Where((b, i) => i < btList.Count - 2).ToArray();
-            btList[btList.Count - 2] = (byte)bsum.Sum(b => b);
             SendData(btList.ToArray());
         }
     }
