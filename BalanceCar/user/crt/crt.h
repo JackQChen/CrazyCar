@@ -10,10 +10,10 @@ typedef struct tagCtrParam
 {
 	int MotorSpeed_L;
 	int MotorSpeed_R;
-	
+
 	float RunSpeed;			//控制速度变量
 	int TurnSpeed;			//控制方向变量	
-	
+
 	int SpeedFilterBuf[SPEED_COUNT];
 }strCtrParam;
 
@@ -28,8 +28,8 @@ extern u8 bizhang_state;
 extern u8 genshui_state;
 
 //超声波控制
- void csb_crt(void);
- 
+void csb_crt(void);
+
 //跟随控制
 void genshui_crt(void);
 
