@@ -1,7 +1,7 @@
 /******************** (C) COPYRIGHT 2014 POWSOS Team **************************
  * 文件名  ： mpu6050.c
- * 描述    :
- * 作者    :
+ * 描述    :     
+ * 作者    :  
 *  功能: mpu6050初始化及数据读取
 *  说明：读取三轴陀螺仪及加速度计原始数据
 *************************************************/
@@ -38,7 +38,7 @@ void mpu6050_init(void)
 	iic_rw(&data_buf, 1, INT_PIN_CFG, MPU6050_ADDR, WRITE);
 
 	/* iic master disable */
-	data_buf = 0x00;
+	data_buf  =0x00;
 	iic_rw(&data_buf, 1, USER_CTLR, MPU6050_ADDR, WRITE);
 
 	/* mpu6050 sleep disable, temperature en, in 8M osc */
@@ -53,7 +53,7 @@ void mpu6050_init(void)
 	data_buf = 0x06;
 	iic_rw(&data_buf, 1, CONFIG, MPU6050_ADDR, WRITE);
 
-	/* GYRO +-2000 °/s */
+	/* GYRO +-2000 °/s */  
 	data_buf = 0x18;
 	iic_rw(&data_buf, 1, GYRO_CONFIG, MPU6050_ADDR, WRITE);
 
@@ -66,7 +66,7 @@ void mpu6050_init(void)
 名称：mpu6050_get_data(s16 *gx,s16 *gy,s16 *gz,s16 *ax,s16 *ay,s16 *az,s16 *temperature)
 功能：mpu6050数据读取
 输入参数：
-	s16 *gx	 变量指针
+  	s16 *gx	 变量指针
 	s16 *gy
 	s16 *gz
 	s16 *ax
@@ -76,7 +76,7 @@ void mpu6050_init(void)
 输出参数：mpu6050温度及三轴原始数据
 返回值：无
 **************************************************/
-void mpu6050_get_data(s16* gx, s16* gy, s16* gz, s16* ax, s16* ay, s16* az, s16* temperature)
+void mpu6050_get_data(s16 *gx, s16 *gy, s16 *gz, s16 *ax, s16 *ay, s16 *az, s16 *temperature)
 {
 	u8 data_buf[14];
 

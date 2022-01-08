@@ -7,7 +7,7 @@
 u8 run_state = 0;			//小车控制标志
 u32 Mcount = 0;			//计数
 
-int  main()
+int main()
 {
 	u8 n = 10;
 
@@ -16,8 +16,8 @@ int  main()
 
 	LED1 = 1;
 
-	serial1_init(9600);			//蓝牙模块使用
-	serial2_init(256000);		//调试使用
+	serial1_init(9600);		//蓝牙模块使用
+	serial2_init(9600);		//调试使用
 
 	iic_init();						//mpu6050初始化
 	delay_ms(100);
@@ -103,7 +103,9 @@ int  main()
 		}
 		up_angle();			//更新姿态,如果更换了mpu6050，请在这里面校准		
 		//发给匿名上位机，实时查看姿态
-		usart2_report_imu((int)(S_Roll * 100), (int)(10), (int)(10), 0, 0, 0, (int)(S_Roll * 100), (int)(100), (int)(10));
+		//usart2_report_imu((int)(S_Roll*100),(int)(10),(int)(10),0,0,0,(int)(S_Roll*100),(int)(100),(int)(10));	
+		serial1_send_char('a');
+		serial2_send_char('b');
 		//	printf("Sroll:%3.2f\r\n",S_Roll);	
 
 #if 1
@@ -144,19 +146,19 @@ int  main()
 				}
 			}
 		}
-		//更新超声波，10*5ms=50ms--------------------------
-		if (Mcount % 10 == 0)
-		{
-			//默认关闭超声波功能
-			if (bizhang_state || genshui_state) csb_juli = start_ceju();
-			else csb_juli = 50;
-			//超声波壁障控制  ,必须在无控制下使用
-			if (bizhang_state == 1) csb_crt();
-			//超声波跟随控制  ,必须在无控制下使用
-			if (genshui_state == 1) genshui_crt();
-			// printf("juli:%d\r\n",csb_juli);
-		}
-		//更新电池，100*5ms=500ms-----------------------------
+		//		//更新超声波，10*5ms=50ms--------------------------
+		//		if(Mcount%10==0)
+		//		{
+		//			//默认关闭超声波功能
+		//			if(bizhang_state||genshui_state) csb_juli = start_ceju();
+		//			else csb_juli = 50;
+		//			//超声波壁障控制  ,必须在无控制下使用
+		//			if(bizhang_state ==1) csb_crt();
+		//			//超声波跟随控制  ,必须在无控制下使用
+		//			if(genshui_state ==1) genshui_crt();
+		//			// printf("juli:%d\r\n",csb_juli);
+		//		}		 
+				//更新电池，100*5ms=500ms-----------------------------
 		if (Mcount % 100 == 0)
 		{
 			up_btv();

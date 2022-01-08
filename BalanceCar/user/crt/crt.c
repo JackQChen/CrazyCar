@@ -326,13 +326,19 @@ void crt()
 	//			CtrParam.MotorSpeed_L = angle_out + speed_out;// - trun_out;
 	//			CtrParam.MotorSpeed_R = angle_out + speed_out;// - trun_out;				
 	//		}		
-	////		CtrParam.MotorSpeed_L = angle_out + speed_out;// + trun_out;
+	////		CtrParam.MotorSpeed_L = angle_out + speed_out;//  + trun_out;
 	////		CtrParam.MotorSpeed_R = angle_out + speed_out - trun_out;	
 	//	}
 
 		//限制速度
 	CtrParam.MotorSpeed_L = limit_speed_out(CtrParam.MotorSpeed_L, 6000);
 	CtrParam.MotorSpeed_R = limit_speed_out(CtrParam.MotorSpeed_R, 6000);
+	if (S_Pitch<0.1 && S_Pitch>-0.1)
+	{
+		CtrParam.MotorSpeed_L = 0;
+		CtrParam.MotorSpeed_R = 0;
+	}
+
 
 	//这里添加其中一个轮子方向锁死的逻辑，避免转弯抖动
 

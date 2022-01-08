@@ -14,20 +14,20 @@
 extern signed short Gyro_X;
 extern signed short Gyro_Y;
 extern signed short Gyro_Z;
-
+	
 extern float S_Pitch;
-
+	
 extern float S_Roll;
 
-typedef struct
+typedef struct 
 {
-
-	float x;
-	float y;
-	float z;
-
+	
+		float x;
+		float y;
+		float z;
+	
 } Axis3f;
-extern float S_Yaw, S_Pitch, S_Roll;  //偏航角，俯仰角，翻滚角
+extern float S_Yaw,S_Pitch,S_Roll;  //偏航角，俯仰角，翻滚角
 
 extern int Xgyro;
 extern int Ygyro;
@@ -40,15 +40,15 @@ extern int Zgyro;
 
 返回：角度
 
-加速度accele 可以不用进行单位转换，因为是同比例关系
+加速度accele 可以不用进行单位转换，因为是同比例关系 
 
 角速度gyro 需要单位转换
 
 */
-float  get_yijie_angle(float acceleXY, float acceleZ, float gyro, float* angle);
+float  get_yijie_angle(float acceleXY,float acceleZ,float gyro,float  *angle);
 
 //陀螺仪校准
-void gyro_jiaozhun(float* gx, float* gy, float* gz);
+void gyro_jiaozhun(float *gx,float *gy,float *gz);
 
 //更新姿态
 void up_angle(void);

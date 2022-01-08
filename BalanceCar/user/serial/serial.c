@@ -8,7 +8,7 @@ strProtocol	ProtocolData;
 u8* pProtocolData = (u8*)&ProtocolData;
 
 
-int fputc(int ch, FILE* p)       //在使用printf时系统自动条用此函数  
+int fputc(int ch, FILE* p)       //在使用printf时系统自动调用此函数  
 {
 	USART_SendData(USART2, (u8)ch);
 	while (USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
@@ -93,7 +93,7 @@ void serial2_init(u32 bt)
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 
 	// Configure USART3   
-	USART_Init(USART2, &USART_InitStructure);//配置串口3  
+	USART_Init(USART2, &USART_InitStructure);//配置串口2
 
 	// Enable USART1 Receive interrupts 使能串口接收中断  
 	USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
@@ -125,7 +125,7 @@ void serial3_init(u32 bt)
 	USART_InitTypeDef USART_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
 	GPIO_InitTypeDef GPIO_InitStructure;    //声明一个结构体变量，用来初始化GPIO  
-   //使能串口的RCC时钟  
+	//使能串口的RCC时钟  
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE); //使能UART3所在GPIOB的时钟  
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
 
@@ -172,78 +172,78 @@ void serial3_init(u32 bt)
 }
 
 /*******************************************************************************
-* 函 数 名         : serial1_sned_char
+* 函 数 名         : serial1_send_char
 * 函数功能         : 串口1发送一字节
 * 输    入         : 无
 * 输    出         : 无
 *******************************************************************************/
-void serial1_sned_char(u8 temp)
+void serial1_send_char(u8 temp)
 {
 	USART_SendData(USART1, (u8)temp);
 	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
 }
 
 /*******************************************************************************
-* 函 数 名         : serial1_sned_buff
+* 函 数 名         : serial1_send_buff
 * 函数功能         : 串口1发送一字符串
 * 输    入         : 无
 * 输    出         : 无
 *******************************************************************************/
-void serial1_sned_buff(u8 buf[], u32 len)
+void serial1_send_buff(u8 buf[], u32 len)
 {
 	u32 i;
 	for (i = 0; i < len; i++)
-		serial1_sned_char(buf[i]);
+		serial1_send_char(buf[i]);
 }
 
 /*******************************************************************************
-* 函 数 名         : serial2_sned_char
+* 函 数 名         : serial2_send_char
 * 函数功能         : 串口2发送一字节
 * 输    入         : 无
 * 输    出         : 无
 *******************************************************************************/
-void serial2_sned_char(u8 temp)
+void serial2_send_char(u8 temp)
 {
 	USART_SendData(USART2, (u8)temp);
 	while (USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
 }
 
 /*******************************************************************************
-* 函 数 名         : serial2_sned_buff
+* 函 数 名         : serial2_send_buff
 * 函数功能         : 串口2发送一字符串
 * 输    入         : 无
 * 输    出         : 无
 *******************************************************************************/
-void serial2_sned_buff(u8 buf[], u32 len)
+void serial2_send_buff(u8 buf[], u32 len)
 {
 	u32 i;
 	for (i = 0; i < len; i++)
-		serial2_sned_char(buf[i]);
+		serial2_send_char(buf[i]);
 }
 
 /*******************************************************************************
-* 函 数 名         : serial3_sned_char
+* 函 数 名         : serial3_send_char
 * 函数功能         : 串口3发送一字节
 * 输    入         : 无
 * 输    出         : 无
 *******************************************************************************/
-void serial3_sned_char(u8 temp)
+void serial3_send_char(u8 temp)
 {
 	USART_SendData(USART3, (u8)temp);
 	while (USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET);
 }
 
 /*******************************************************************************
-* 函 数 名         : serial3_sned_buff
+* 函 数 名         : serial3_send_buff
 * 函数功能         : 串口3发送一字符串
 * 输    入         : 无
 * 输    出         : 无
 *******************************************************************************/
-void serial3_sned_buff(u8 buf[], u32 len)
+void serial3_send_buff(u8 buf[], u32 len)
 {
 	u32 i;
 	for (i = 0; i < len; i++)
-		serial3_sned_char(buf[i]);
+		serial3_send_char(buf[i]);
 }
 
 void USART1_IRQHandler(void)

@@ -1,15 +1,22 @@
 #include "niming_swj.h"
 //串口1发送1个字符 
 //c:要发送的字符
+void usart1_send_char(u8 c)
+{
+//	while((USART1->SR&0X40)==0);//等待上一次发送完毕   
+//	USART1->DR=c; 
+
+	USART_SendData(USART1,(u8)c);      
+    while(USART_GetFlagStatus(USART1,USART_FLAG_TXE)==RESET);
+}
 void usart2_send_char(u8 c)
 {
 //	while((USART1->SR&0X40)==0);//等待上一次发送完毕   
 //	USART1->DR=c; 
 
 	USART_SendData(USART2,(u8)c);      
-    while(USART_GetFlagStatus(USART2,USART_FLAG_TXE)==RESET);  
-	
-} 
+    while(USART_GetFlagStatus(USART2,USART_FLAG_TXE)==RESET);
+}
 //传送数据给匿名四轴上位机软件(V2.6版本)
 //fun:功能字. 0XA0~0XAF
 //data:数据缓存区,最多28字节!!

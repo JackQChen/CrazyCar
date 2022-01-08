@@ -1,31 +1,166 @@
 
-T1FDC 000:297 SEGGER J-Link V5.02e Log File (0000ms, 0269ms total)
-T1FDC 000:297 DLL Compiled: Sep 25 2015 18:24:14 (0000ms, 0269ms total)
-T1FDC 000:297 Logging started @ 2020-06-18 12:35 (0000ms, 0269ms total)
-T1FDC 000:297 JLINK_SetWarnOutHandler(...) (0000ms, 0269ms total)
-T1FDC 000:297 JLINK_OpenEx(...)
-Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
-Hardware: V7.00
-S/N: 20090928
-Feature(s): RDI,FlashDL,FlashBP,JFlash,GDBFull  returns O.K. (0269ms, 0538ms total)
-T1FDC 000:566 JLINK_SetErrorOutHandler(...) (0000ms, 0538ms total)
-T1FDC 000:566 JLINK_ExecCommand("ProjectFile = "F:\My company\部门文档\技术部门\RemoteCar\两轮平衡车设计\软件设计\步进电机平衡车new1.20(jm)(稳定控制+跟随)ok - 四元数互补\JLinkSettings.ini"", ...)  returns 0x00 (0001ms, 0539ms total)
-T1FDC 000:573 JLINK_ExecCommand("Device = STM32F103C8", ...)Device "STM32F103C8" selected.  returns 0x00 (0009ms, 0548ms total)
-T1FDC 000:582 JLINK_ExecCommand("DisableConnectionTimeout", ...)  returns 0x01 (0000ms, 0548ms total)
-T1FDC 000:582 JLINK_GetHardwareVersion()  returns 0x11170 (0000ms, 0548ms total)
-T1FDC 000:582 JLINK_GetDLLVersion()  returns 50205 (0000ms, 0548ms total)
-T1FDC 000:582 JLINK_GetFirmwareString(...) (0000ms, 0548ms total)
-T1FDC 000:604 JLINK_GetDLLVersion()  returns 50205 (0000ms, 0548ms total)
-T1FDC 000:604 JLINK_GetCompileDateTime() (0000ms, 0548ms total)
-T1FDC 000:607 JLINK_GetFirmwareString(...) (0000ms, 0548ms total)
-T1FDC 000:609 JLINK_GetHardwareVersion()  returns 0x11170 (0000ms, 0548ms total)
-T1FDC 000:618 JLINK_TIF_Select(JLINKARM_TIF_SWD)  returns 0x00 (0003ms, 0551ms total)
-T1FDC 000:621 JLINK_SetSpeed(5000) (0001ms, 0552ms total)
-T1FDC 000:622 JLINK_GetId() >0x108 TIF> >0x108 TIF> >0x108 TIF> >0x108 TIF> >0x108 TIF> >0x108 TIF> >0x108 TIF> >0x108 TIF> >0x108 TIF> >0x108 TIF> >0x108 TIF> >0x108 TIF>STM32 (connect): Can not attach to CPU. Trying connect under reset. >0x108 TIF> >0x108 TIF>
-  ***** Error: STM32: Connecting to CPU via connect under reset failed.
-                JLINK_EMU_HasCapEx(0x0000002C)  returns 0x00 (0000ms, 0000ms total)
-                JLINK_EMU_HasCapEx(0x0000002C)  returns 0x00 (0000ms, 0000ms total)
-                returns 0x00000000 (0934ms, 1486ms total)
-T1FDC 002:733 JLINK_Close() (0001ms, 1487ms total)
-T1FDC 002:733  (0001ms, 1487ms total)
-T1FDC 002:733 Closed (0001ms, 1487ms total)
+T1DEC 004:637 SEGGER J-Link V4.96d Log File (0001ms, 0024ms total)
+T1DEC 004:637 DLL Compiled: Jan 29 2015 11:45:37 (0001ms, 0024ms total)
+T1DEC 004:637 Logging started @ 2022-01-07 21:27 (0001ms, 0024ms total)
+T1DEC 004:638 JLINK_SetWarnOutHandler(...) (0000ms, 0024ms total)
+T1DEC 004:638 JLINK_OpenEx(...)
+  ***** Error: Can not connect to J-Link via USB.  returns "Can not connect to J-Link via USB." (0000ms, 0024ms total)
+
+  ***** API Error: API JLINK_GetHardwareVersion function called before JLINKARM_Open()
+T1DEC 004:638 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:137 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:137 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:138 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:138 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:139 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:139 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:139 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:140 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:140 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:141 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:141 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:142 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:142 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:143 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:143 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:143 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:144 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:144 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:145 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:145 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:146 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:146 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:146 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:147 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:147 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:148 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:148 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:148 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:149 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:149 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:150 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:150 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:151 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:151 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:151 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:152 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:152 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:153 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:153 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:153 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:154 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:154 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:155 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:155 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:155 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_SetSpeed function called before JLINKARM_Open()
+T1DEC 006:156 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_WriteMem function called before JLINKARM_Open()
+T1DEC 006:156 
+  ***** Error: Can not connect to J-Link via USB.
+  ***** API Error: API JLINK_ReadMem function called before JLINKARM_Open()
+T1DEC 006:157 
+  ***** Error: Can not connect to J-Link via USB.JLINK_IsOpen()  returns 0x00 (0000ms, 0045ms total)
+T1DEC 006:158 JLINK_EMU_SelectByUSBSN(SerialNo = 0)  returns 0xFFFFFFFF (0000ms, 0045ms total)
+T1DEC 006:158 JLINK_EnableLog(...) (0000ms, 0045ms total)
+T1DEC 006:158 JLINK_SetWarnOutHandler(...) (0000ms, 0045ms total)
+T1DEC 006:158 JLINK_OpenEx(...)
+  ***** Error: Can not connect to J-Link via USB.  returns "Can not connect to J-Link via USB." (0001ms, 0046ms total)
+
+  ***** API Error: API JLINK_GetHardwareVersion function called before JLINKARM_Open()
+T1DEC 006:159 
+  ***** Error: Can not connect to J-Link via USB.JLINK_Close() (0001ms, 0047ms total)
+T1DEC 052:895  (0001ms, 0047ms total)
+T1DEC 052:895 Closed (0001ms, 0047ms total)
