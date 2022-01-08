@@ -12,7 +12,7 @@ int main()
 	u8 n = 10;
 
 	LED_init('C', 14);
-	LED_init('A', 4);	//LED初始化
+	LED_init('A', 4);	//LED初始化 
 
 	LED1 = 1;
 
@@ -21,7 +21,7 @@ int main()
 
 	iic_init();						//mpu6050初始化
 	delay_ms(100);
-	printf("初始化MPU\r\n");
+	printf("Initial MPU\n");
 	mpu6050_init();
 	Adc_Init();						//初始化电池电压采集
 	KEY_Init();						//初始化用户按键采集
@@ -36,25 +36,19 @@ int main()
 	}
 
 	LED1 = 0;
-	printf("平衡车硬件初始化完成\r\n");
-	SysParam.RemoteMode = REMOTE_MODE_APP; 			//设置遥控模式为蓝牙遥控	
+	printf("Initialization complete\n");
+	SysParam.RemoteMode = REMOTE_MODE_APP; 			//设置遥控模式为应用遥控
 
 	while (1)
 	{
 		u8 sta = 0;
 		delay_ms(10);
 
-		SysParam.ConnectTimeCnt++;				//计数值自加
-		if (RC_Analy() == _OK_)	//接收2.4G遥控数据
+		SysParam.ConnectTimeCnt++;
+		
+		if (Uart.RxState == UART_RX_OK)	//接收到应用数据
 		{
-			SysParam.RemoteMode = REMOTE_MODE_REMOTE; 			//设置遥控模式为蓝牙遥控
-			SysParam.ConnectTimeCnt = 0;				//清定时计数值
-			SysParam.RemoteConnectState = 1;			//遥控已经连接
-		}
-
-		if (Uart.RxState == UART_RX_OK)	//接收到蓝牙数据
-		{
-			SysParam.RemoteMode = REMOTE_MODE_APP; 			//设置遥控模式为蓝牙遥控		
+			SysParam.RemoteMode = REMOTE_MODE_APP; 			//设置遥控模式为应用遥控
 			SysParam.ConnectTimeCnt = 0;				//清定时计数值
 			SysParam.RemoteConnectState = 1;			//遥控已经连接	
 			Uart.RxState = UART_RX_READY;
@@ -75,12 +69,7 @@ int main()
 		if (SysParam.RemoteConnectState == 1)
 		{
 			cha1 = 0;
-			if (SysParam.RemoteMode == REMOTE_MODE_REMOTE)
-			{
-				CtrParam.RunSpeed = (Remote.pitch - 1500) * 4;
-				CtrParam.TurnSpeed = (Remote.roll - 1500) * 4;
-			}
-			else if (SysParam.RemoteMode == REMOTE_MODE_APP)
+			if (SysParam.RemoteMode == REMOTE_MODE_APP)
 			{
 				CtrParam.RunSpeed = (BluetoothKeyHandle.Handle.Ch3Value - 100) * 20;
 				CtrParam.TurnSpeed = (BluetoothKeyHandle.Handle.Ch4Value - 100) * 20;
@@ -88,12 +77,7 @@ int main()
 		}
 		else
 		{
-			if (SysParam.RemoteMode == REMOTE_MODE_REMOTE)
-			{
-				Remote.pitch = 1500;
-				Remote.roll = 1500;
-			}
-			else if (SysParam.RemoteMode == REMOTE_MODE_APP)
+			if (SysParam.RemoteMode == REMOTE_MODE_APP)
 			{
 				Remote.pitch = 100;
 				Remote.roll = 100;
@@ -104,9 +88,10 @@ int main()
 		up_angle();			//更新姿态,如果更换了mpu6050，请在这里面校准		
 		//发给匿名上位机，实时查看姿态
 		//usart2_report_imu((int)(S_Roll*100),(int)(10),(int)(10),0,0,0,(int)(S_Roll*100),(int)(100),(int)(10));	
-		serial1_send_char('a');
-		serial2_send_char('b');
-		//	printf("Sroll:%3.2f\r\n",S_Roll);	
+		if (Mcount % 100 == 0)
+			printf("Pitch:%3.2f\n",S_Pitch);
+		//serial2_send_char('b');
+		//printf("Sroll:%3.2f\r\n",S_Roll);	
 
 #if 1
 	//平衡小车控制-----------------------------------------
@@ -146,19 +131,7 @@ int main()
 				}
 			}
 		}
-		//		//更新超声波，10*5ms=50ms--------------------------
-		//		if(Mcount%10==0)
-		//		{
-		//			//默认关闭超声波功能
-		//			if(bizhang_state||genshui_state) csb_juli = start_ceju();
-		//			else csb_juli = 50;
-		//			//超声波壁障控制  ,必须在无控制下使用
-		//			if(bizhang_state ==1) csb_crt();
-		//			//超声波跟随控制  ,必须在无控制下使用
-		//			if(genshui_state ==1) genshui_crt();
-		//			// printf("juli:%d\r\n",csb_juli);
-		//		}		 
-				//更新电池，100*5ms=500ms-----------------------------
+		//更新电池，100*5ms=500ms-----------------------------
 		if (Mcount % 100 == 0)
 		{
 			up_btv();

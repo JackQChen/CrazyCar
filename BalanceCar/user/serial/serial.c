@@ -10,8 +10,8 @@ u8* pProtocolData = (u8*)&ProtocolData;
 
 int fputc(int ch, FILE* p)       //在使用printf时系统自动调用此函数  
 {
-	USART_SendData(USART2, (u8)ch);
-	while (USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
+	USART_SendData(USART1, (u8)ch);
+	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
 	return ch;
 }
 /*******************************************************************************
@@ -24,15 +24,15 @@ void serial1_init(u32 bt)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;    //声明一个结构体变量，用来初始化GPIO  
 	NVIC_InitTypeDef NVIC_InitStructure;     //中断结构体定义  
-	USART_InitTypeDef  USART_InitStructure;   //串口结构体定义  
+	USART_InitTypeDef USART_InitStructure;   //串口结构体定义  
 
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_USART1 | RCC_APB2Periph_AFIO, ENABLE);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;//TX  
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;//TX
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;//RX  
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;//RX
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 	//GPIO_InitStructure.GPIO_Mode=GPIO_Mode_IN_FLOATING;  
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
@@ -274,7 +274,7 @@ void USART2_IRQHandler(void)
 	USART_ClearFlag(USART2, USART_FLAG_TC);
 	if (USART_GetITStatus(USART2, USART_IT_RXNE) != Bit_RESET)//检查指定的USART中断发生与否
 	{
-		u8	k = USART_ReceiveData(USART2);
+		u8 k = USART_ReceiveData(USART2);
 	}
 }
 

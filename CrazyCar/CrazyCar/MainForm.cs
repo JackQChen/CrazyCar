@@ -57,7 +57,7 @@ namespace CrazyCar
             {
                 byte[] btArr = new byte[1024];
                 var count = 0;
-                var str = "";
+                var strBuffer = new StringBuilder();
                 while (true)
                 {
                     try
@@ -71,10 +71,20 @@ namespace CrazyCar
                         if (count > 0)
                         {
                             serialPort.Read(btArr, 0, count);
-                            str = Encoding.UTF8.GetString(btArr, 0, count);
-                            Log("recv:" + str);
-                            if (actSendToBrowser != null)
-                                actSendToBrowser(str);
+                            strBuffer.Append(Encoding.UTF8.GetString(btArr, 0, count));
+                            var strFull = strBuffer.ToString();
+                            var lastIndex = strFull.LastIndexOf('\n');
+                            if (lastIndex > -1)
+                            {
+                                foreach (var strLine in strFull.Substring(0, lastIndex).Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                                {
+                                    Log("recv:" + strLine);
+                                    if (actSendToBrowser != null)
+                                        actSendToBrowser(strLine);
+                                }
+                                strBuffer.Clear();
+                                strBuffer.Append(strFull.Substring(lastIndex + 1));
+                            }
                         }
                     }
                     catch (Exception ex)
