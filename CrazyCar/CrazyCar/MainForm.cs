@@ -159,20 +159,27 @@ namespace CrazyCar
         {
             SendData(btData);
         }
-        int i = 0;
+
+        // Motor = 1, Light = 2, Control = 3
+
+        private void btnMotor_Click(object sender, EventArgs e)
+        {
+            var data = new byte[] { 1, 0, unchecked((byte)~(1 + 0)) };
+            SendData(data);
+        }
+
+        private void btnLight_Click(object sender, EventArgs e)
+        {
+            var data = new byte[] { 2, 0, unchecked((byte)~(2 + 0)) };
+            SendData(data);
+        }
+
         private void btnSend_Click(object sender, EventArgs e)
         {
             //var str = this.txtData.Text + '\n';
             //this.txtData.Clear();
             //var btList = str.ToCharArray().Select(s => (byte)s);
             //SendData(btList.ToArray());
-            var data = new byte[] {
-            1,
-            1,
-            unchecked((byte)~(1+1))
-            };
-            SendData(new byte[1] { data[i] });
-            i++;
         }
     }
 }

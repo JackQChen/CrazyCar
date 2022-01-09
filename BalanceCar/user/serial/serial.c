@@ -257,10 +257,10 @@ u8 get_length(u8 control)
 {
 	switch (control)
 	{
-	case CONTROL_ON:
+	case CONTROL_MOTOR:
 	case CONTROL_LIGHT:
 		return 2;
-	case CONTROL_CAR:
+	case CONTROL_CONTROL:
 		return 5;
 	}
 	return 0;
@@ -270,11 +270,11 @@ void process_data(u8 control)
 {
 	switch (control)
 	{
-	case CONTROL_ON:
+	case CONTROL_MOTOR:
 	case CONTROL_LIGHT:
 		BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
 		break;
-	case CONTROL_CAR:
+	case CONTROL_CONTROL:
 		BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
 		BluetoothKeyHandle.Handle.Ch1Value = dataArray[2];
 		break;
@@ -299,6 +299,7 @@ void USART1_IRQHandler(void)
 				process_data(dataControl);
 				Uart.RxState = UART_RX_OK;
 			}
+			dataCheck = 0;
 			Uart.RxCnt = 0;
 		}
 		else

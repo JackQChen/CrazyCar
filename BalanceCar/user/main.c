@@ -43,39 +43,29 @@ int main()
 		u8 sta = 0;
 		delay_ms(10);
 
-		SysParam.ConnectTimeCnt++;
-		
 		if (Uart.RxState == UART_RX_OK)	//接收到应用数据
 		{
-			SysParam.ConnectTimeCnt = 0;				//清定时计数值
-			SysParam.RemoteConnectState = 1;			//应用已经连接	
+			switch (BluetoothKeyHandle.KeyNum)
+			{
+			case CONTROL_MOTOR:
+				run_state = run_state == 0 ? 1 : 0;
+				LED1 = run_state;
+				break;
+			case CONTROL_LIGHT:
+				break;
+			case CONTROL_CONTROL:
+				cha1 = 0;
+				CtrParam.RunSpeed = (BluetoothKeyHandle.Handle.Ch1Value - 100) * 20;
+				CtrParam.TurnSpeed = (BluetoothKeyHandle.Handle.Ch2Value - 100) * 20;
+				break;
+			}
 			Uart.RxState = UART_RX_READY;
 		}
-
-		if (SysParam.ConnectTimeCnt >= 10)
-		{
-			SysParam.ConnectTimeCnt = 0;				//清定时计数值
-			SysParam.RemoteConnectState = 0;
-		}
-
-		if (SysParam.RemoteConnectState == 1)
-		{
-			cha1 = 0;
-			CtrParam.RunSpeed = (BluetoothKeyHandle.Handle.Ch1Value - 100) * 20;
-			CtrParam.TurnSpeed = (BluetoothKeyHandle.Handle.Ch2Value - 100) * 20;
-		}
-		else
-		{
-			CtrParam.RunSpeed = 0;
-			CtrParam.TurnSpeed = 0;
-		}
-		up_angle();			//更新姿态,如果更换了mpu6050，请在这里面校准		
-		//发给匿名上位机，实时查看姿态
-		//usart2_report_imu((int)(S_Roll*100),(int)(10),(int)(10),0,0,0,(int)(S_Roll*100),(int)(100),(int)(10));	
+		//更新姿态,如果更换了mpu6050，请在这里面校准
+		up_angle();
+		//发给上位机，查看姿态
 		//if (Mcount % 100 == 0)
 		//	printf("Pitch:%3.2f\n",S_Pitch);
-		//serial2_send_char('b');
-		//printf("Sroll:%3.2f\r\n",S_Roll);	
 
 #if 1
 	//平衡小车控制-----------------------------------------

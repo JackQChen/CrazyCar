@@ -6,9 +6,9 @@
 //速度滤波次数
 #define SPEED_COUNT  20
 
-#define CONTROL_ON  1
-#define CONTROL_CAR  2
-#define CONTROL_LIGHT  3
+#define CONTROL_MOTOR  1
+#define CONTROL_LIGHT  2
+#define CONTROL_CONTROL  3
 
 typedef struct tagCtrParam
 {
