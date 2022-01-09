@@ -5,7 +5,8 @@
 
 strUart Uart;
 strProtocol ProtocolData;
-unsigned char dataArray[16];
+u8 dataArray[16];
+u8 dataControl, dataCheck;
 u8* pProtocolData = (u8*)&ProtocolData;
 
 int fputc(int ch, FILE* p)       //在使用printf时系统自动调用此函数  
@@ -252,45 +253,59 @@ void serial3_send_buff(u8 buf[], u32 len)
 		serial3_send_char(buf[i]);
 }
 
+u8 get_length(u8 control)
+{
+	switch (control)
+	{
+	case CONTROL_ON:
+	case CONTROL_LIGHT:
+		return 2;
+	case CONTROL_CAR:
+		return 5;
+	}
+	return 0;
+}
+
+void process_data(u8 control)
+{
+	switch (control)
+	{
+	case CONTROL_ON:
+	case CONTROL_LIGHT:
+		BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
+		break;
+	case CONTROL_CAR:
+		BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
+		BluetoothKeyHandle.Handle.Ch1Value = dataArray[2];
+		break;
+	}
+}
+
+// Control | Data | Check
 void USART1_IRQHandler(void)
 {
 	USART_ClearFlag(USART1, USART_FLAG_TC);
 	if (USART_GetITStatus(USART1, USART_IT_RXNE) != Bit_RESET)//检查指定的USART中断发生与否
 	{
 		dataArray[Uart.RxCnt] = USART_ReceiveData(USART1);
-		switch (dataArray[0])
+		dataCheck += dataArray[Uart.RxCnt];
+		if (Uart.RxCnt == 0)
+			dataControl = dataArray[0];
+		if (Uart.RxCnt == get_length(dataControl))
 		{
-		case CONTROL_ON:
-			if (Uart.RxCnt == 3)
+			if (++dataCheck == 0)
 			{
-				BluetoothKeyHandle.KeyNum = dataArray[0];
-				BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
-				Uart.RxCnt = 0;
+				BluetoothKeyHandle.KeyNum = dataControl;
+				process_data(dataControl);
 				Uart.RxState = UART_RX_OK;
 			}
-			break;
-		case CONTROL_CAR:
-			if (Uart.RxCnt == 5)
-			{
-				BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
-				BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
-				Uart.RxCnt = 0;
-				Uart.RxState = UART_RX_OK;
-			}
-			break;
-		case CONTROL_LIGHT:
-			if (Uart.RxCnt == 3)
-			{
-				BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
-				Uart.RxCnt = 0;
-				Uart.RxState = UART_RX_OK;
-			}
-			break;
-		}
-		Uart.RxCnt++;
-		if (Uart.RxCnt > MAX_UART_DATA_LEN)
 			Uart.RxCnt = 0;
+		}
+		else
+			Uart.RxCnt++;
 	}
+	if (Uart.RxCnt > MAX_UART_DATA_LEN)
+		Uart.RxCnt = 0;
 }
 
 void USART2_IRQHandler(void)

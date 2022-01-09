@@ -199,6 +199,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>dataArray</ItemText>
         </Ww>
+        <Ww>
+          <count>4</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>BluetoothKeyHandle</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
