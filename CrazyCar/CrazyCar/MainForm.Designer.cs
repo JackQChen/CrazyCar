@@ -62,7 +62,7 @@
             this.txtData.Name = "txtData";
             this.txtData.Size = new System.Drawing.Size(100, 21);
             this.txtData.TabIndex = 2;
-            this.txtData.Text = "11  0  0";
+            this.txtData.Text = "abc";
             // 
             // panel1
             // 

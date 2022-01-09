@@ -9,7 +9,6 @@
 
 #define FRAME_HEAD		0xFD	//帧头
 #define FRAME_TAIL		0xEB	//帧尾
-#define FRAME_END			0x0A	//停止
 
 #define UART_RX_READY	0
 #define UART_RX_OK		1

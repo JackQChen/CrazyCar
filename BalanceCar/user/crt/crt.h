@@ -1,10 +1,14 @@
-﻿#ifndef _CRT_H
+#ifndef _CRT_H
 #define _CRT_H
 
 #include "config.h"
 
 //速度滤波次数
 #define SPEED_COUNT  20
+
+#define CONTROL_ON  1
+#define CONTROL_CAR  2
+#define CONTROL_LIGHT  3
 
 typedef struct tagCtrParam
 {

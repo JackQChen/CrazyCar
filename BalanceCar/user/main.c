@@ -36,7 +36,7 @@ int main()
 
 	LED1 = 0;
 	printf("Initialization complete.\n");
-	SysParam.RemoteMode = REMOTE_MODE_APP; 			//设置遥控模式为应用遥控
+	SysParam.RemoteMode = REMOTE_MODE_APP; 			//设置遥控模式为应用
 
 	while (1)
 	{
@@ -47,11 +47,9 @@ int main()
 		
 		if (Uart.RxState == UART_RX_OK)	//接收到应用数据
 		{
-			SysParam.RemoteMode = REMOTE_MODE_APP; 			//设置遥控模式为应用遥控
 			SysParam.ConnectTimeCnt = 0;				//清定时计数值
-			SysParam.RemoteConnectState = 1;			//遥控已经连接	
+			SysParam.RemoteConnectState = 1;			//应用已经连接	
 			Uart.RxState = UART_RX_READY;
-			
 		}
 
 		if (SysParam.ConnectTimeCnt >= 10)
@@ -63,20 +61,12 @@ int main()
 		if (SysParam.RemoteConnectState == 1)
 		{
 			cha1 = 0;
-			if (SysParam.RemoteMode == REMOTE_MODE_APP)
-			{
-				CtrParam.RunSpeed = (BluetoothKeyHandle.Handle.Ch3Value - 100) * 20;
-				CtrParam.TurnSpeed = (BluetoothKeyHandle.Handle.Ch4Value - 100) * 20;
-			}
+			CtrParam.RunSpeed = (BluetoothKeyHandle.Handle.Ch1Value - 100) * 20;
+			CtrParam.TurnSpeed = (BluetoothKeyHandle.Handle.Ch2Value - 100) * 20;
 		}
 		else
 		{
-			if (SysParam.RemoteMode == REMOTE_MODE_APP)
-			{
-				Remote.pitch = 100;
-				Remote.roll = 100;
-			}
-			CtrParam.TurnSpeed = 0;
+			CtrParam.RunSpeed = 0;
 			CtrParam.TurnSpeed = 0;
 		}
 		up_angle();			//更新姿态,如果更换了mpu6050，请在这里面校准		

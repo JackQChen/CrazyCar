@@ -22,14 +22,14 @@
 typedef struct  tagKeyHandleValue
 { 
 	u16 TimerCNT;
-	u8		KeyNum;			//按键值
+	u8 KeyNum;			//按键值
 	struct
 	{ 
 	  u8 Ch1Value;
 	  u8 Ch2Value;
 	  u8 Ch3Value;
 	  u8 Ch4Value;
-	}Handle;
+	} Handle;
 }strBluetoothKeyHandle;
 
 extern strBluetoothKeyHandle BluetoothKeyHandle ;

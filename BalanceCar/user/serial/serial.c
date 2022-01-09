@@ -4,8 +4,8 @@
 #include "crt.h"
 
 strUart Uart;
-strProtocol	ProtocolData;
-unsigned char dataArray[255];
+strProtocol ProtocolData;
+unsigned char dataArray[16];
 u8* pProtocolData = (u8*)&ProtocolData;
 
 int fputc(int ch, FILE* p)       //在使用printf时系统自动调用此函数  
@@ -258,14 +258,36 @@ void USART1_IRQHandler(void)
 	if (USART_GetITStatus(USART1, USART_IT_RXNE) != Bit_RESET)//检查指定的USART中断发生与否
 	{
 		dataArray[Uart.RxCnt] = USART_ReceiveData(USART1);
-		Uart.RxCnt++;
-		if (dataArray[Uart.RxCnt] == FRAME_END)
+		switch (dataArray[0])
 		{
-			//			BluetoothKeyHandle.Handle.Ch1Value = dataArray[0];
-			//			BluetoothKeyHandle.Handle.Ch2Value = dataArray[1];
-			Uart.RxCnt = 0;
-			Uart.RxState = UART_RX_OK;
+		case CONTROL_ON:
+			if (Uart.RxCnt == 3)
+			{
+				BluetoothKeyHandle.KeyNum = dataArray[0];
+				BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
+				Uart.RxCnt = 0;
+				Uart.RxState = UART_RX_OK;
+			}
+			break;
+		case CONTROL_CAR:
+			if (Uart.RxCnt == 5)
+			{
+				BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
+				BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
+				Uart.RxCnt = 0;
+				Uart.RxState = UART_RX_OK;
+			}
+			break;
+		case CONTROL_LIGHT:
+			if (Uart.RxCnt == 3)
+			{
+				BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
+				Uart.RxCnt = 0;
+				Uart.RxState = UART_RX_OK;
+			}
+			break;
 		}
+		Uart.RxCnt++;
 		if (Uart.RxCnt > MAX_UART_DATA_LEN)
 			Uart.RxCnt = 0;
 	}

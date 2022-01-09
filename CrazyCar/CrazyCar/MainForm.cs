@@ -162,13 +162,9 @@ namespace CrazyCar
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            var btList = new List<byte>() {
-                12,
-                25,
-                23,
-                45,
-                (int)'\n'
-            };
+            var str = this.txtData.Text + '\n';
+            this.txtData.Clear();
+            var btList = str.ToCharArray().Select(s => (byte)s);
             SendData(btList.ToArray());
         }
     }
