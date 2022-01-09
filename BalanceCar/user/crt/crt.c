@@ -1,24 +1,24 @@
-#include "crt.h"
+ï»¿#include "crt.h"
 #include "Common.h"
 
 strCtrParam CtrParam;
 
-float cha1 = 0;		//ËÙ¶È»ı·Ö
-float up_kp = 310.0;	//Æ½ºâ»·
-float speed_kp = 1.50, speed_ki = 0.001;//ËÙ¶È»·
-float trun_kp = 1.2;	//×ªÏò»·
+float cha1 = 0;		//é€Ÿåº¦ç§¯åˆ†
+float up_kp = 310.0;	//å¹³è¡¡ç¯
+float speed_kp = 1.50, speed_ki = 0.001;//é€Ÿåº¦ç¯
+float trun_kp = 1.2;	//è½¬å‘ç¯
 
-u8 bizhang_state = 0;		//±ÚÕÏÄ£Ê½±äÁ¿ ,Ä¬ÈÏ¹Ø±Õ
-u8 genshui_state = 0;		//¸úËæÄ£Ê½±äÁ¿ £¬Ä¬ÈÏ¹Ø±Õ
+u8 bizhang_state = 0;		//å£éšœæ¨¡å¼å˜é‡ ,é»˜è®¤å…³é—­
+u8 genshui_state = 0;		//è·Ÿéšæ¨¡å¼å˜é‡ ï¼Œé»˜è®¤å…³é—­
 
-//³µÂÖ×ªÏò´¦Àí
+//è½¦è½®è½¬å‘å¤„ç†
 static void lun_dir(short left_motor, short right_motor)
 {
 	LDIR = !(left_motor > 0 ? 0 : 1);
 	RDIR = right_motor > 0 ? 0 : 1;
 }
 
-//Êä³öÏßĞÔ»¯
+//è¾“å‡ºçº¿æ€§åŒ–
 static int out_linear(int v)
 {
 	int out;
@@ -29,14 +29,14 @@ static int out_linear(int v)
 
 	return out;
 }
-//ÏŞ·ùÊä³ö
+//é™å¹…è¾“å‡º
 static int limit_out(int motor)
 {
 	if (motor > MAX_FREQ) motor = MAX_FREQ;
 	return motor;
 }
 
-//ÏŞ·ùËÙ¶È±íÊ¾
+//é™å¹…é€Ÿåº¦è¡¨ç¤º
 static int limit_speed_out(int motor, int MAX)
 {
 	if (motor >= MAX) motor = MAX;
@@ -44,23 +44,23 @@ static int limit_speed_out(int motor, int MAX)
 	return motor;
 }
 
-//Ö±Á¢p¿ØÖÆ
+//ç›´ç«‹pæ§åˆ¶
 static int up_right(float angle)
 {
 	int out = 0;
 
 	out = up_kp * angle;
-	return out;      //¼ÆËãÆ½ºâ¿ØÖÆ	
+	return out;      //è®¡ç®—å¹³è¡¡æ§åˆ¶	
 }
 
-//×ªÏò¿ØÖÆ
+//è½¬å‘æ§åˆ¶
 static int clr_trun(float gyro)
 {
-	return trun_kp * (gyro - CtrParam.TurnSpeed);      //¼ÆËãÆ½ºâ¿ØÖÆ
+	return trun_kp * (gyro - CtrParam.TurnSpeed);      //è®¡ç®—å¹³è¡¡æ§åˆ¶
 }
 
 
-//ËÙ¶ÈÂË²¨
+//é€Ÿåº¦æ»¤æ³¢
 static int speed_lvbo(int moto1, int moto2)
 {
 	u8  i = 0;
@@ -71,7 +71,7 @@ static int speed_lvbo(int moto1, int moto2)
 	{
 		CtrParam.SpeedFilterBuf[i - 1] = CtrParam.SpeedFilterBuf[i];
 	}
-	//À¶ÑÀ¿ØÖÆÔÚÕâÀï
+	//è“ç‰™æ§åˆ¶åœ¨è¿™é‡Œ
 	CtrParam.SpeedFilterBuf[SPEED_COUNT - 1] = (moto1 + moto2) / 2 - CtrParam.RunSpeed;
 
 	for (i = 0; i < SPEED_COUNT; i++)
@@ -82,7 +82,7 @@ static int speed_lvbo(int moto1, int moto2)
 	return (Sum_Speed / SPEED_COUNT);
 }
 
-//ËÙ¶È¿ØÖÆ
+//é€Ÿåº¦æ§åˆ¶
 int clr_speed(int moto1, int moto2)
 {
 	static float cha = 0;
@@ -98,14 +98,14 @@ int clr_speed(int moto1, int moto2)
 	return out;
 }
 
-//³¬Éù²¨¿ØÖÆ
+//è¶…å£°æ³¢æ§åˆ¶
 void csb_crt()
 {
 	if (csb_juli < 20) CtrParam.RunSpeed = -2000;
 	else CtrParam.RunSpeed = 0;
 }
 
-//¸úËæ¿ØÖÆ
+//è·Ÿéšæ§åˆ¶
 void genshui_crt()
 {
 	if (csb_juli > 100)
@@ -171,15 +171,15 @@ static void set_pwm(u16 left_motor, u16 right_motor)
 void crt()
 {
 	u16 sl, sr;
-	int angle_out = 0;//Æ½ºâÊä³öÁ¿
-	int speed_out = 0;//ËÙ¶ÈÊä³öÁ¿
-	int trun_out = 0;//×ªÏòÊä³öÁ¿
+	int angle_out = 0;//å¹³è¡¡è¾“å‡ºé‡
+	int speed_out = 0;//é€Ÿåº¦è¾“å‡ºé‡
+	int trun_out = 0;//è½¬å‘è¾“å‡ºé‡
 
 	int speed_l, speed_r;
 
-	angle_out = up_right(S_Pitch);	//½Ç¶È¿ØÖÆ
-	speed_out = clr_speed(CtrParam.MotorSpeed_L, CtrParam.MotorSpeed_R);//ËÙ¶È¿ØÖÆ
-	trun_out = clr_trun(Zgyro);//×ªÏò¿ØÖÆ
+	angle_out = up_right(S_Pitch);	//è§’åº¦æ§åˆ¶
+	speed_out = clr_speed(CtrParam.MotorSpeed_L, CtrParam.MotorSpeed_R);//é€Ÿåº¦æ§åˆ¶
+	trun_out = clr_trun(Zgyro);//è½¬å‘æ§åˆ¶
 	
 	if (SysParam.RemoteMode == REMOTE_MODE_APP)
 	{
@@ -195,7 +195,7 @@ void crt()
 		}
 	}
 	
-	//ÏŞÖÆËÙ¶È
+	//é™åˆ¶é€Ÿåº¦
 	CtrParam.MotorSpeed_L = limit_speed_out(CtrParam.MotorSpeed_L, 6000);
 	CtrParam.MotorSpeed_R = limit_speed_out(CtrParam.MotorSpeed_R, 6000);
 	if (S_Pitch<0.1 && S_Pitch>-0.1)
@@ -205,9 +205,9 @@ void crt()
 	}
 
 
-	//ÕâÀïÌí¼ÓÆäÖĞÒ»¸öÂÖ×Ó·½ÏòËøËÀµÄÂß¼­£¬±ÜÃâ×ªÍä¶¶¶¯
+	//è¿™é‡Œæ·»åŠ å…¶ä¸­ä¸€ä¸ªè½®å­æ–¹å‘é”æ­»çš„é€»è¾‘ï¼Œé¿å…è½¬å¼¯æŠ–åŠ¨
 
-	//³µÂÖ·½Ïò
+	//è½¦è½®æ–¹å‘
 	lun_dir(CtrParam.MotorSpeed_L, CtrParam.MotorSpeed_R);
 	sl = CtrParam.MotorSpeed_L;
 	sr = CtrParam.MotorSpeed_R;
@@ -215,15 +215,15 @@ void crt()
 	if (CtrParam.MotorSpeed_L < 0) sl = CtrParam.MotorSpeed_L * -1;
 	if (CtrParam.MotorSpeed_R < 0) sr = CtrParam.MotorSpeed_R * -1;
 
-	//Êä³öÏßĞÔ»¯
+	//è¾“å‡ºçº¿æ€§åŒ–
 	sl = out_linear(sl);
 	sr = out_linear(sr);
 
-	//ÏŞ·ùÊä³ö
+	//é™å¹…è¾“å‡º
 	sl = limit_out(sl);
 	sr = limit_out(sr);
 
-	//ÉèÖÃµç»úËÙ¶È
+	//è®¾ç½®ç”µæœºé€Ÿåº¦
 	set_pwm(sl, sr);
 }
 

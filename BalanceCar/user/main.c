@@ -4,30 +4,29 @@
 #include <math.h>
 #include "Common.h"
 
-u8 run_state = 0;			//Ð¡³µ¿ØÖÆ±êÖ¾
-u32 Mcount = 0;			//¼ÆÊý
+u8 run_state = 0;			//å°è½¦æŽ§åˆ¶æ ‡å¿—
+u32 Mcount = 0;			//è®¡æ•°
 
 int main()
 {
 	u8 n = 10;
 
 	LED_init('C', 14);
-	LED_init('A', 4);	//LED³õÊ¼»¯ 
+	LED_init('A', 4);	//LEDåˆå§‹åŒ– 
 
 	LED1 = 1;
 
-	serial1_init(9600);		//À¶ÑÀÄ£¿éÊ¹ÓÃ
-	serial2_init(9600);		//µ÷ÊÔÊ¹ÓÃ
+	serial1_init(9600);		//è°ƒè¯•ä½¿ç”¨
 
-	iic_init();						//mpu6050³õÊ¼»¯
+	iic_init();						//mpu6050åˆå§‹åŒ–
 	delay_ms(100);
-	printf("Initial MPU\n");
+	printf("Initial device...\n");
 	mpu6050_init();
-	Adc_Init();						//³õÊ¼»¯µç³ØµçÑ¹²É¼¯
-	KEY_Init();						//³õÊ¼»¯ÓÃ»§°´¼ü²É¼¯
-	A4988_init();					//a4988³õÊ¼»¯	
-	A4988_en(1);					//¹Ø±ÕA4988
-	csb_init();						//³¬Éù²¨³õÊ¼»¯	
+	Adc_Init();						//åˆå§‹åŒ–ç”µæ± ç”µåŽ‹é‡‡é›†
+	KEY_Init();						//åˆå§‹åŒ–ç”¨æˆ·æŒ‰é”®é‡‡é›†
+	A4988_init();					//a4988åˆå§‹åŒ–	
+	A4988_en(1);					//å…³é—­A4988
+	csb_init();						//è¶…å£°æ³¢åˆå§‹åŒ–	
 	NRF24L01_Configuration();
 	while (n--)
 	{
@@ -36,8 +35,8 @@ int main()
 	}
 
 	LED1 = 0;
-	printf("Initialization complete\n");
-	SysParam.RemoteMode = REMOTE_MODE_APP; 			//ÉèÖÃÒ£¿ØÄ£Ê½ÎªÓ¦ÓÃÒ£¿Ø
+	printf("Initialization complete.\n");
+	SysParam.RemoteMode = REMOTE_MODE_APP; 			//è®¾ç½®é¥æŽ§æ¨¡å¼ä¸ºåº”ç”¨é¥æŽ§
 
 	while (1)
 	{
@@ -46,18 +45,18 @@ int main()
 
 		SysParam.ConnectTimeCnt++;
 		
-		if (Uart.RxState == UART_RX_OK)	//½ÓÊÕµ½Ó¦ÓÃÊý¾Ý
+		if (Uart.RxState == UART_RX_OK)	//æŽ¥æ”¶åˆ°åº”ç”¨æ•°æ®
 		{
-			SysParam.RemoteMode = REMOTE_MODE_APP; 			//ÉèÖÃÒ£¿ØÄ£Ê½ÎªÓ¦ÓÃÒ£¿Ø
-			SysParam.ConnectTimeCnt = 0;				//Çå¶¨Ê±¼ÆÊýÖµ
-			SysParam.RemoteConnectState = 1;			//Ò£¿ØÒÑ¾­Á¬½Ó	
+			SysParam.RemoteMode = REMOTE_MODE_APP; 			//è®¾ç½®é¥æŽ§æ¨¡å¼ä¸ºåº”ç”¨é¥æŽ§
+			SysParam.ConnectTimeCnt = 0;				//æ¸…å®šæ—¶è®¡æ•°å€¼
+			SysParam.RemoteConnectState = 1;			//é¥æŽ§å·²ç»è¿žæŽ¥	
 			Uart.RxState = UART_RX_READY;
 			
 		}
 
 		if (SysParam.ConnectTimeCnt >= 10)
 		{
-			SysParam.ConnectTimeCnt = 0;				//Çå¶¨Ê±¼ÆÊýÖµ
+			SysParam.ConnectTimeCnt = 0;				//æ¸…å®šæ—¶è®¡æ•°å€¼
 			SysParam.RemoteConnectState = 0;
 		}
 
@@ -80,8 +79,8 @@ int main()
 			CtrParam.TurnSpeed = 0;
 			CtrParam.TurnSpeed = 0;
 		}
-		up_angle();			//¸üÐÂ×ËÌ¬,Èç¹û¸ü»»ÁËmpu6050£¬ÇëÔÚÕâÀïÃæÐ£×¼		
-		//·¢¸øÄäÃûÉÏÎ»»ú£¬ÊµÊ±²é¿´×ËÌ¬
+		up_angle();			//æ›´æ–°å§¿æ€,å¦‚æžœæ›´æ¢äº†mpu6050ï¼Œè¯·åœ¨è¿™é‡Œé¢æ ¡å‡†		
+		//å‘ç»™åŒ¿åä¸Šä½æœºï¼Œå®žæ—¶æŸ¥çœ‹å§¿æ€
 		//usart2_report_imu((int)(S_Roll*100),(int)(10),(int)(10),0,0,0,(int)(S_Roll*100),(int)(100),(int)(10));	
 		//if (Mcount % 100 == 0)
 		//	printf("Pitch:%3.2f\n",S_Pitch);
@@ -89,7 +88,7 @@ int main()
 		//printf("Sroll:%3.2f\r\n",S_Roll);	
 
 #if 1
-	//Æ½ºâÐ¡³µ¿ØÖÆ-----------------------------------------
+	//å¹³è¡¡å°è½¦æŽ§åˆ¶-----------------------------------------
 		if (run_state == 0 || S_Pitch > 45 || S_Pitch < -45)
 		{
 			if (run_state == 1)
@@ -102,12 +101,12 @@ int main()
 		}
 		else
 		{
-			crt();				//ËùÓÐÐ¡³µµÄ¿ØÖÆ-----------------------------------
+			crt();				//æ‰€æœ‰å°è½¦çš„æŽ§åˆ¶-----------------------------------
 			A4988_en(0);
 		}
 #endif	
 
-		//¸üÐÂ°´¼ü£¬10*5ms=50ms-----------------------------
+		//æ›´æ–°æŒ‰é”®ï¼Œ10*5ms=50ms-----------------------------
 		if (Mcount % 10 == 0)
 		{
 			sta = up_key();
@@ -126,12 +125,12 @@ int main()
 				}
 			}
 		}
-		//¸üÐÂµç³Ø£¬100*5ms=500ms-----------------------------
+		//æ›´æ–°ç”µæ± ï¼Œ100*5ms=500ms-----------------------------
 		if (Mcount % 100 == 0)
 		{
 			up_btv();
 			//	printf("V:%d\r\n",btv);	
-			//µÍµçÑ¹¼ì²â£¬µÍÓÚ7V±¨¾¯------------------------------------
+			//ä½Žç”µåŽ‹æ£€æµ‹ï¼Œä½ŽäºŽ7VæŠ¥è­¦------------------------------------
 			if (btv < 7000)
 			{
 				if (btv < 7000 && btv>5000) LED1 = !LED1;

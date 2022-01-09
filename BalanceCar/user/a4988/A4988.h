@@ -1,4 +1,4 @@
-#ifndef _A4988_H
+﻿#ifndef _A4988_H
 #define _A4988_H
 
 #include "config.h"
@@ -13,14 +13,14 @@ extern  u16 CCR2_Val;
 #define RDIR  PAout(5)
 #define LDIR  PBout(0)
 
-//1ֹͣ
+//1停止
 #define LEN   PAout(7)
 #define REN   PBout(12)
 
-//��ʼ��
+//初始化
 void A4988_init(void);
 
-//ʹ��
+//使能
 void A4988_en(u8 state);
 
 #endif

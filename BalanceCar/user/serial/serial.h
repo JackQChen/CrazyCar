@@ -5,10 +5,11 @@
 #include "stdio.h"  
 
 
-#define MAX_UART_DATA_LEN	sizeof(strProtocol)				//串口能接收的最大数据长度
+#define MAX_UART_DATA_LEN	255				//串口能接收的最大数据长度
 
 #define FRAME_HEAD		0xFD	//帧头
 #define FRAME_TAIL		0xEB	//帧尾
+#define FRAME_END			0x0A	//停止
 
 #define UART_RX_READY	0
 #define UART_RX_OK		1

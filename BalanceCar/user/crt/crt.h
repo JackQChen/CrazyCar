@@ -1,9 +1,9 @@
-#ifndef _CRT_H
+ï»¿#ifndef _CRT_H
 #define _CRT_H
 
 #include "config.h"
 
-//ËÙ¶ÈÂË²¨´ÎÊı
+//é€Ÿåº¦æ»¤æ³¢æ¬¡æ•°
 #define SPEED_COUNT  20
 
 typedef struct tagCtrParam
@@ -11,31 +11,31 @@ typedef struct tagCtrParam
 	int MotorSpeed_L;
 	int MotorSpeed_R;
 
-	float RunSpeed;			//¿ØÖÆËÙ¶È±äÁ¿
-	int TurnSpeed;			//¿ØÖÆ·½Ïò±äÁ¿	
+	float RunSpeed;			//æ§åˆ¶é€Ÿåº¦å˜é‡
+	int TurnSpeed;			//æ§åˆ¶æ–¹å‘å˜é‡	
 
 	int SpeedFilterBuf[SPEED_COUNT];
 }strCtrParam;
 
 extern strCtrParam CtrParam;
 
-extern float cha1;		//ËÙ¶È»ı·Ö
+extern float cha1;		//é€Ÿåº¦ç§¯åˆ†
 
-//±ÚÕÏÄ£Ê½±äÁ¿
+//å£éšœæ¨¡å¼å˜é‡
 extern u8 bizhang_state;
 
-//¸úËæÄ£Ê½±äÁ¿
+//è·Ÿéšæ¨¡å¼å˜é‡
 extern u8 genshui_state;
 
-//³¬Éù²¨¿ØÖÆ
+//è¶…å£°æ³¢æ§åˆ¶
 void csb_crt(void);
 
-//¸úËæ¿ØÖÆ
+//è·Ÿéšæ§åˆ¶
 void genshui_crt(void);
 
 #define mabs(v) (v<0?-v:v)
 
-//ËùÓĞ¿ØÖÆ
+//æ‰€æœ‰æ§åˆ¶
 void crt(void);
 void ClearCtrParam(void);
 

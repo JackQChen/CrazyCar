@@ -160,12 +160,13 @@ namespace CrazyCar
             SendData(btData);
         }
 
-
         private void btnSend_Click(object sender, EventArgs e)
         {
             var btList = new List<byte>() {
                 12,
                 25,
+                23,
+                45,
                 (int)'\n'
             };
             SendData(btList.ToArray());

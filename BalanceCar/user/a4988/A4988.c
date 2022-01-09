@@ -1,10 +1,10 @@
-#include "A4988.h"
+ï»¿#include "A4988.h"
 
 //static u16  capture = 0;
 u16 CCR1_Val = 60000;
 u16 CCR2_Val = 60000;
 
-//³õÊ¼»¯
+//åˆå§‹åŒ–
 void A4988_init()
 {	
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
@@ -70,21 +70,21 @@ void A4988_init()
 	TIM_OC4PreloadConfig(TIM1, TIM_OCPreload_Enable);
 	
 	TIM_ARRPreloadConfig(TIM1, ENABLE);
-	TIM_CtrlPWMOutputs(TIM1,ENABLE);//MOE=1,¿ªÆôOCºÍOCNÊä³ö
+	TIM_CtrlPWMOutputs(TIM1,ENABLE);//MOE=1,å¼€å¯OCå’ŒOCNè¾“å‡º
 	/* TIM2 enable counter */
 	TIM_Cmd(TIM1, ENABLE);  
 
-	//¿ØÖÆ²½½øµç»ú·½Ïò
+	//æ§åˆ¶æ­¥è¿›ç”µæœºæ–¹å‘
 	LED_init('A',5);
 	LED_init('B',0);
 
-	//¿ØÖÆ²½½øµç»úen //1Í£Ö¹
+	//æ§åˆ¶æ­¥è¿›ç”µæœºen //1åœæ­¢
 	LED_init('A',7);
 	LED_init('B',12);
 	A4988_en(1);
 }
 
-//Ê¹ÄÜ
+//ä½¿èƒ½
 void A4988_en(u8 state)
 {
 	LEN=state;
@@ -101,15 +101,15 @@ void TIM1_PWMConfig()
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1,ENABLE);
 
-	 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO,ENABLE);//Ê¹ÄÜPORTA,PORTCÊ±ÖÓ
-	//GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);//¹Ø±Õjtag£¬Ê¹ÄÜSWD£¬¿ÉÒÔÓÃSWDÄ£Ê½µ÷ÊÔ
+	 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO,ENABLE);//ä½¿èƒ½PORTA,PORTCæ—¶é’Ÿ
+	//GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);//å…³é—­jtagï¼Œä½¿èƒ½SWDï¼Œå¯ä»¥ç”¨SWDæ¨¡å¼è°ƒè¯•
 	
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1; 
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz; 
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; //¶Ë¿ÚÅäÖÃÎª
-	GPIO_Init(GPIOB, &GPIO_InitStructure);	//³õÊ¼»¯¶Ë¿Ú		
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; //ç«¯å£é…ç½®ä¸º
+	GPIO_Init(GPIOB, &GPIO_InitStructure);	//åˆå§‹åŒ–ç«¯å£		
 	 
-	GPIO_PinRemapConfig(GPIO_FullRemap_TIM1, ENABLE);  //Ê¹ÓÃÖØÓ³Éä¹¦ÄÜ
+	GPIO_PinRemapConfig(GPIO_FullRemap_TIM1, ENABLE);  //ä½¿ç”¨é‡æ˜ å°„åŠŸèƒ½
 	
 	//GPIO_Config( GPIOA,RCC_APB2Periph_GPIOA,GPIO_Mode_AF_PP,GPIO_Pin_8|GPIO_Pin_9);
 	//GPIO_Config( GPIOB,RCC_APB2Periph_GPIOB,GPIO_Mode_AF_PP,GPIO_Pin_13|GPIO_Pin_14);
@@ -126,7 +126,7 @@ void TIM1_PWMConfig()
 	TIM_OCInitStructure.TIM_OutputNState =TIM_OutputNState_Enable;
 	TIM_OCInitStructure.TIM_Pulse =right_motor/2;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OCInitStructure.TIM_OCNPolarity =TIM_OCNPolarity_High; // ¸ßµçÆ½ÎªÓĞĞ§
+	TIM_OCInitStructure.TIM_OCNPolarity =TIM_OCNPolarity_High; // é«˜ç”µå¹³ä¸ºæœ‰æ•ˆ
 	TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Reset;
 	TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCIdleState_Reset;
 
@@ -143,14 +143,14 @@ void TIM1_PWMConfig()
 	TIM_BDTRConfig(TIM1,&TIM_BDTRInitStructure);
 	
 	TIM_ARRPreloadConfig(TIM1,ENABLE);
-	TIM_CtrlPWMOutputs(TIM1,ENABLE);//MOE=1,¿ªÆôOCºÍOCNÊä³ö
+	TIM_CtrlPWMOutputs(TIM1,ENABLE);//MOE=1,å¼€å¯OCå’ŒOCNè¾“å‡º
 	TIM_Cmd(TIM1,ENABLE);
 	
-	//¿ØÖÆ²½½øµç»ú·½Ïò
+	//æ§åˆ¶æ­¥è¿›ç”µæœºæ–¹å‘
 	LED_init('A',5);
 	LED_init('B',0);
 
-	//¿ØÖÆ²½½øµç»úen //1Í£Ö¹
+	//æ§åˆ¶æ­¥è¿›ç”µæœºen //1åœæ­¢
 	LED_init('A',7);
 	LED_init('B',12);
 	A4988_en(0);	
@@ -160,8 +160,8 @@ void TIM1_PWMConfig()
 }
 
 
-//ÆäËûº¯Êı£º
-//¿ØÖÆ¸ß¼¶¶¨Ê±Æ÷Ä³¸öÍ¨µÀ¼°Æä·´ÏàÍ¨µÀµ¥´¦Êä³ö»ò¹Ø±Õ
+//å…¶ä»–å‡½æ•°ï¼š
+//æ§åˆ¶é«˜çº§å®šæ—¶å™¨æŸä¸ªé€šé“åŠå…¶åç›¸é€šé“å•å¤„è¾“å‡ºæˆ–å…³é—­
 
 void TIM_CCxCmd(TIM_TypeDef* TIMx, uint16_t TIM_Channel, uint16_t TIM_CCx);
 void TIM_CCxNCmd(TIM_TypeDef* TIMx, uint16_t TIM_Channel, uint16_t TIM_CCxN);

@@ -3,13 +3,15 @@
 
 #include "sys.h"
 
-#define P  0.1   //ÏàĞÅ¼ÓËÙ¶ÈµÄ¸ÅÂÊ±È
-#define T  0.01   //½ÇËÙ¶È»ı·ÖÊ±¼ä
+#define P  0.1   //ç›¸ä¿¡åŠ é€Ÿåº¦çš„æ¦‚ç‡æ¯”
+#define T  0.01   //è§’é€Ÿåº¦ç§¯åˆ†æ—¶é—´
 
-//Ğ£×¼Öµ
-#define  GX_JIAO  37  	 //ÍÓÂİÒÇXµÄĞ£×¼Öµ
-#define  GY_JIAO  -32   //ÍÓÂİÒÇYµÄĞ£×¼Öµ
-#define  GZ_JIAO  25  		 //ÍÓÂİÒÇZµÄĞ£×¼Öµ
+//æ ¡å‡†å€¼
+#define  GX_JIAO  50  	//é™€èºä»ªXçš„æ ¡å‡†å€¼
+#define  GY_JIAO  3   	//é™€èºä»ªYçš„æ ¡å‡†å€¼
+#define  GZ_JIAO  30  	//é™€èºä»ªZçš„æ ¡å‡†å€¼
+#define  GPitch_JIAO  -4.6  	//é™€èºä»ªPitchçš„æ ¡å‡†å€¼
+#define  GRoll_JIAO  0  	//é™€èºä»ªRollçš„æ ¡å‡†å€¼
 
 extern signed short Gyro_X;
 extern signed short Gyro_Y;
@@ -27,34 +29,34 @@ typedef struct
 		float z;
 	
 } Axis3f;
-extern float S_Yaw,S_Pitch,S_Roll;  //Æ«º½½Ç£¬¸©Ñö½Ç£¬·­¹ö½Ç
+extern float S_Yaw,S_Pitch,S_Roll;  //åèˆªè§’ï¼Œä¿¯ä»°è§’ï¼Œç¿»æ»šè§’
 
 extern int Xgyro;
 extern int Ygyro;
 extern int Zgyro;
 
 /*
-Í¨¹ıÒ»½×»¥²¹»ñÈ¡½Ç¶È
+é€šè¿‡ä¸€é˜¶äº’è¡¥è·å–è§’åº¦
 
-²ÎÊı: ¼ÓËÙ¶Èaccele  ½ÇËÙ¶Ègyro
+å‚æ•°: åŠ é€Ÿåº¦accele  è§’é€Ÿåº¦gyro
 
-·µ»Ø£º½Ç¶È
+è¿”å›ï¼šè§’åº¦
 
-¼ÓËÙ¶Èaccele ¿ÉÒÔ²»ÓÃ½øĞĞµ¥Î»×ª»»£¬ÒòÎªÊÇÍ¬±ÈÀı¹ØÏµ 
+åŠ é€Ÿåº¦accele å¯ä»¥ä¸ç”¨è¿›è¡Œå•ä½è½¬æ¢ï¼Œå› ä¸ºæ˜¯åŒæ¯”ä¾‹å…³ç³» 
 
-½ÇËÙ¶Ègyro ĞèÒªµ¥Î»×ª»»
+è§’é€Ÿåº¦gyro éœ€è¦å•ä½è½¬æ¢
 
 */
 float  get_yijie_angle(float acceleXY,float acceleZ,float gyro,float  *angle);
 
-//ÍÓÂİÒÇĞ£×¼
+//é™€èºä»ªæ ¡å‡†
 void gyro_jiaozhun(float *gx,float *gy,float *gz);
 
-//¸üĞÂ×ËÌ¬
+//æ›´æ–°å§¿æ€
 void up_angle(void);
 
 
-void imuUpdate(Axis3f acc, Axis3f gyro, float dt);	/*Êı¾İÈÚºÏ »¥²¹ÂË²¨*/
-float invSqrt(float x);	/*¿ìËÙ¿ªÆ½·½Çóµ¹*/
+void imuUpdate(Axis3f acc, Axis3f gyro, float dt);	/*æ•°æ®èåˆ äº’è¡¥æ»¤æ³¢*/
+float invSqrt(float x);	/*å¿«é€Ÿå¼€å¹³æ–¹æ±‚å€’*/
 
 #endif

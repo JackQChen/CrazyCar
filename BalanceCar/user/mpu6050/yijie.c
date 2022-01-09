@@ -21,15 +21,15 @@ float get_yijie_angle(float acceleXY,float acceleZ,float gyro,float  *angle)
 {
 	float _angle;
 	
-	_angle=atan2(acceleXY,acceleZ)*180/3.14;    //¼ÆËãÇã½Ç,	
-	*angle=(1-P)*(*angle+gyro*T)  +   P*_angle;//Ò»½×»¥²¹ÂË²¨
+	_angle=atan2(acceleXY,acceleZ)*180/3.14;    //è®¡ç®—å€¾è§’,	
+	*angle=(1-P)*(*angle+gyro*T)  +   P*_angle;//ä¸€é˜¶äº’è¡¥æ»¤æ³¢
 	return *angle;
 }
 
 void gyro_jiaozhun(float *gx,float *gy,float *gz)
 {	
 	#if  0
-		printf("gx1:%4.2f,gy:%4.2f£¬gz:%4.2f\r\n",*gx,*gy,*gz);
+		printf("gx1:%4.2f,gy:%4.2fï¼Œgz:%4.2f\r\n",*gx,*gy,*gz);
 	#endif
 
 	*gx+=GX_JIAO;
@@ -37,7 +37,7 @@ void gyro_jiaozhun(float *gx,float *gy,float *gz)
 	*gz+=GZ_JIAO;
 
 	#if  0
-		printf("gx2:%4.2f,gy:%4.2f£¬gz:%4.2f\r\n",*gx,*gy,*gz);
+		printf("gx2:%4.2f,gy:%4.2fï¼Œgz:%4.2f\r\n",*gx,*gy,*gz);
 	#endif
 
 	*gx=(*gx/16.4); 
@@ -45,25 +45,25 @@ void gyro_jiaozhun(float *gx,float *gy,float *gz)
 	*gz=(*gz/16.4);
 }
 
-// ËÄÔªÊý±äÁ¿¶¨Òå
+// å››å…ƒæ•°å˜é‡å®šä¹‰
 #if 1
-static float Kp = 0.8f;		/*±ÈÀýÔöÒæ*/
-static float Ki = 0.001f;		/*»ý·ÖÔöÒæ*/
+static float Kp = 0.8f;		/*æ¯”ä¾‹å¢žç›Š*/
+static float Ki = 0.001f;		/*ç§¯åˆ†å¢žç›Š*/
 static float exInt = 0.0f;
 static float eyInt = 0.0f;
-static float ezInt = 0.0f;		/*»ý·ÖÎó²îÀÛ¼Æ*/
+static float ezInt = 0.0f;		/*ç§¯åˆ†è¯¯å·®ç´¯è®¡*/
 
-static float q0 = 1.0f;	/*ËÄÔªÊý*/
+static float q0 = 1.0f;	/*å››å…ƒæ•°*/
 static float q1 = 0.0f;
 static float q2 = 0.0f;
 static float q3 = 0.0f;	
 
-float S_Yaw,S_Pitch,S_Roll;  //Æ«º½½Ç£¬¸©Ñö½Ç£¬·­¹ö½Ç
+float S_Yaw,S_Pitch,S_Roll;  //åèˆªè§’ï¼Œä¿¯ä»°è§’ï¼Œç¿»æ»šè§’
 int Xgyro;
 int Ygyro;
 int Zgyro;
 
-float invSqrt(float x)	/*¿ìËÙ¿ªÆ½·½Çóµ¹*/
+float invSqrt(float x)	/*å¿«é€Ÿå¼€å¹³æ–¹æ±‚å€’*/
 {
 	float halfx = 0.5f * x;
 	float y = x;
@@ -75,13 +75,13 @@ float invSqrt(float x)	/*¿ìËÙ¿ªÆ½·½Çóµ¹*/
 }
 
 
-void imuUpdate(Axis3f acc, Axis3f gyro, float dt)	/*Êý¾ÝÈÚºÏ »¥²¹ÂË²¨*/
+void imuUpdate(Axis3f acc, Axis3f gyro, float dt)	/*æ•°æ®èžåˆ äº’è¡¥æ»¤æ³¢*/
 {
 	float normalise;
 	float ex, ey, ez;
-	float q0s, q1s, q2s, q3s;	/*ËÄÔªÊýµÄÆ½·½*/
-	//static float R11,R21;		/*¾ØÕó(1,1),(2,1)Ïî*/
-	static float vecxZ, vecyZ, veczZ;	/*»úÌå×ø±êÏµÏÂµÄZ·½ÏòÏòÁ¿*/
+	float q0s, q1s, q2s, q3s;	/*å››å…ƒæ•°çš„å¹³æ–¹*/
+	//static float R11,R21;		/*çŸ©é˜µ(1,1),(2,1)é¡¹*/
+	static float vecxZ, vecyZ, veczZ;	/*æœºä½“åæ ‡ç³»ä¸‹çš„Zæ–¹å‘å‘é‡*/
 	float halfT =0.5f * dt;
 	float q0Last;
 	float q1Last;
@@ -89,36 +89,36 @@ void imuUpdate(Axis3f acc, Axis3f gyro, float dt)	/*Êý¾ÝÈÚºÏ »¥²¹ÂË²¨*/
 	float q3Last;
 	
 
-	gyro.x = gyro.x * 0.017453293f;	/* ¶È×ª»¡¶È */
+	gyro.x = gyro.x * 0.017453293f;	/* åº¦è½¬å¼§åº¦ */
 	gyro.y = gyro.y * 0.017453293f;
 	gyro.z = gyro.z * 0.017453293f;
 
-	/* Ä³Ò»¸ö·½Ïò¼ÓËÙ¶È²»Îª0 */
+	/* æŸä¸€ä¸ªæ–¹å‘åŠ é€Ÿåº¦ä¸ä¸º0 */
 	if((acc.x != 0.0f) || (acc.y != 0.0f) || (acc.z != 0.0f))
 	{
-		/*µ¥Î»»¯¼ÓËÙ¼Æ²âÁ¿Öµ*/
+		/*å•ä½åŒ–åŠ é€Ÿè®¡æµ‹é‡å€¼*/
 		normalise = invSqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
 		acc.x *= normalise;
 		acc.y *= normalise;
 		acc.z *= normalise;
 
-		/*¼ÓËÙ¼Æ¶ÁÈ¡µÄ·½ÏòÓëÖØÁ¦¼ÓËÙ¼Æ·½ÏòµÄ²îÖµ£¬ÓÃÏòÁ¿²æ³Ë¼ÆËã*/
+		/*åŠ é€Ÿè®¡è¯»å–çš„æ–¹å‘ä¸Žé‡åŠ›åŠ é€Ÿè®¡æ–¹å‘çš„å·®å€¼ï¼Œç”¨å‘é‡å‰ä¹˜è®¡ç®—*/
 		ex = (acc.y * veczZ - acc.z * vecyZ);
 		ey = (acc.z * vecxZ - acc.x * veczZ);
 		ez = (acc.x * vecyZ - acc.y * vecxZ);
 		
-		/*Îó²îÀÛ¼Æ£¬Óë»ý·Ö³£ÊýÏà³Ë*/
+		/*è¯¯å·®ç´¯è®¡ï¼Œä¸Žç§¯åˆ†å¸¸æ•°ç›¸ä¹˜*/
 		exInt += Ki * ex * dt ;  
 		eyInt += Ki * ey * dt ;
 		ezInt += Ki * ez * dt ;
 
 		
-		/*ÓÃ²æ»ýÎó²îÀ´×öPIÐÞÕýÍÓÂÝÁãÆ«£¬¼´µÖÏûÍÓÂÝ¶ÁÊýÖÐµÄÆ«ÒÆÁ¿*/
+		/*ç”¨å‰ç§¯è¯¯å·®æ¥åšPIä¿®æ­£é™€èžºé›¶åï¼Œå³æŠµæ¶ˆé™€èžºè¯»æ•°ä¸­çš„åç§»é‡*/
 		gyro.x += Kp * ex + exInt;
 		gyro.y += Kp * ey + eyInt;
 		gyro.z += Kp * ez + ezInt;
 	}
-	/* Ò»½×½üËÆËã·¨£¬ËÄÔªÊýÔË¶¯Ñ§·½³ÌµÄÀëÉ¢»¯ÐÎÊ½ºÍ»ý·Ö */
+	/* ä¸€é˜¶è¿‘ä¼¼ç®—æ³•ï¼Œå››å…ƒæ•°è¿åŠ¨å­¦æ–¹ç¨‹çš„ç¦»æ•£åŒ–å½¢å¼å’Œç§¯åˆ† */
 	q0Last = q0;
 	q1Last = q1;
 	q2Last = q2;
@@ -128,33 +128,33 @@ void imuUpdate(Axis3f acc, Axis3f gyro, float dt)	/*Êý¾ÝÈÚºÏ »¥²¹ÂË²¨*/
 	q2 += ( q0Last * gyro.y - q1Last * gyro.z + q3Last * gyro.x) * halfT;
 	q3 += ( q0Last * gyro.z + q1Last * gyro.y - q2Last * gyro.x) * halfT;
 
-	/*µ¥Î»»¯ËÄÔªÊý*/
+	/*å•ä½åŒ–å››å…ƒæ•°*/
 	normalise = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
 	q0 *= normalise;
 	q1 *= normalise;
 	q2 *= normalise;
 	q3 *= normalise;
-	/*ËÄÔªÊýµÄÆ½·½*/
+	/*å››å…ƒæ•°çš„å¹³æ–¹*/
 	q0s = q0 * q0;
 	q1s = q1 * q1;
 	q2s = q2 * q2;
 	q3s = q3 * q3;
 	
-//	R11 = q0s + q1s - q2s - q3s;	/*¾ØÕó(1,1)Ïî*/
-//	R21 = 2 * (q1 * q2 + q0 * q3);	/*¾ØÕó(2,1)Ïî*/
+//	R11 = q0s + q1s - q2s - q3s;	/*çŸ©é˜µ(1,1)é¡¹*/
+//	R21 = 2 * (q1 * q2 + q0 * q3);	/*çŸ©é˜µ(2,1)é¡¹*/
 
-	/*»úÌå×ø±êÏµÏÂµÄZ·½ÏòÏòÁ¿*/
-	vecxZ = 2 * (q1 * q3 - q0 * q2);/*¾ØÕó(3,1)Ïî*/
-	vecyZ = 2 * (q0 * q1 + q2 * q3);/*¾ØÕó(3,2)Ïî*/
-	veczZ = q0s - q1s - q2s + q3s;	/*¾ØÕó(3,3)Ïî*/
+	/*æœºä½“åæ ‡ç³»ä¸‹çš„Zæ–¹å‘å‘é‡*/
+	vecxZ = 2 * (q1 * q3 - q0 * q2);/*çŸ©é˜µ(3,1)é¡¹*/
+	vecyZ = 2 * (q0 * q1 + q2 * q3);/*çŸ©é˜µ(3,2)é¡¹*/
+	veczZ = q0s - q1s - q2s + q3s;	/*çŸ©é˜µ(3,3)é¡¹*/
 	
 	if (vecxZ>1) vecxZ=1;
 	if (vecxZ<-1) vecxZ=-1;
 	
-	/*¼ÆËãroll pitch yaw Å·À­½Ç*/
+	/*è®¡ç®—roll pitch yaw æ¬§æ‹‰è§’*/
 	S_Pitch = asinf(vecxZ) * 57.29578f; 
 	S_Roll = atan2f(vecyZ, veczZ) * 57.29578f;
-	//S_Yaw = atan2f(R21, R11) * 57.29578f;				//Ì«Æ®ÁË£¬ÉáÆú°É	
+	//S_Yaw = atan2f(R21, R11) * 57.29578f;				//å¤ªé£˜äº†ï¼Œèˆå¼ƒå§	
 }
 
 #endif
@@ -165,7 +165,7 @@ static float angleX_buf[ANGLE_COUNT]={0};
 static float angleY_buf[ANGLE_COUNT]={0};
 static float angleZ_buf[ANGLE_COUNT]={0};
 
-//¼ÓËÙ¶ÈÂË²¨
+//åŠ é€Ÿåº¦æ»¤æ³¢
 static int angle_lvbo()
 {
 	u8  i=0;
@@ -209,14 +209,14 @@ void up_angle()
 	mpu6050_get_data(&Gyro_X, &Gyro_Y, &Gyro_Z, &Accel_X, &Accel_Y , &Accel_Z, &temperature);
 	//printf("read:%5d %5d %5d %5d %5d %5d\r\n",Gyro_X,Gyro_Y,Gyro_Z,Accel_X,Accel_Y,Accel_Z);
 	angle_lvbo();
-	//Ð£×¼µÄÊ±ºò£¬ÏÈ´òÓ¡Ð£×¼Ç°µÄÖµ
-	//printf("Ð£×¼Ç°:%5d %5d %5d\r\n",Gyro_X,Gyro_Y,Gyro_Z);
-	//ÔÚÕâÀï¼õÈ¥Ç°Ãæ´òÓ¡µÄÖµ
-	Gyro_X+= 50;
-	Gyro_Y+= 3;
-	Gyro_Z+= 30;
-	//Ð£×¼ºóµÄÖµÒªÇ÷½ü0
-	//printf("Ð£×¼ºó:%3.1f %3.1f %3.1f\r\n",Gyro_X,Gyro_Y,Gyro_Z);
+	//æ ¡å‡†çš„æ—¶å€™ï¼Œå…ˆæ‰“å°æ ¡å‡†å‰çš„å€¼
+	//printf("æ ¡å‡†å‰:%5d %5d %5d\r\n",Gyro_X,Gyro_Y,Gyro_Z);
+	//åœ¨è¿™é‡Œå‡åŽ»å‰é¢æ‰“å°çš„å€¼
+	Gyro_X+= GX_JIAO;
+	Gyro_Y+= GY_JIAO;
+	Gyro_Z+= GZ_JIAO;
+	//æ ¡å‡†åŽçš„å€¼è¦è¶‹è¿‘0
+	//printf("æ ¡å‡†åŽ:%3.1f %3.1f %3.1f\r\n",Gyro_X,Gyro_Y,Gyro_Z);
 
 	acc.x=(Accel_X)/16384.0;
 	acc.y=(Accel_Y)/16384.0;
@@ -230,11 +230,11 @@ void up_angle()
 	Ygyro=gyo.y;
 	Zgyro=gyo.z;
 
-	imuUpdate(acc,gyo,0.01);  //ËÄÔªÊý½âËã£¬zÖáºÜÆ®,Õâ¸öº¯ÊýÆäÊµ²î²»¶à136us
+	imuUpdate(acc,gyo,0.01);  //å››å…ƒæ•°è§£ç®—ï¼Œzè½´å¾ˆé£˜,è¿™ä¸ªå‡½æ•°å…¶å®žå·®ä¸å¤š136us
 	
-	S_Pitch -= 4.6;
+	S_Pitch += GPitch_JIAO;
 	
-	//Ð¡³µË®Æ½Ð£×¼£¬²ðÏÂÂÖÌ¥Æ½·ÅµÄÎó²îÖµ
-	S_Roll -= 0;
+	//å°è½¦æ°´å¹³æ ¡å‡†ï¼Œæ‹†ä¸‹è½®èƒŽå¹³æ”¾çš„è¯¯å·®å€¼
+	S_Roll += GRoll_JIAO;
 	
 }
