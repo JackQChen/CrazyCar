@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Web.Script.Serialization;
 using WebSocketSharp.Server;
 
@@ -21,14 +22,32 @@ namespace CrazyCar
             };
         }
 
-        byte[] btCtl = new byte[3];
+        byte[] btCtl = new byte[4];
         protected override void OnMessage(WebSocketSharp.MessageEventArgs e)
         {
-            var data = convert.Deserialize<MessageData>(e.Data);
-            btCtl[0] = (byte)data.l;
-            btCtl[1] = (byte)data.r;
-            btCtl[2] = 0xff;
-            SendToDevice(btCtl);
+            var data = convert.Deserialize<Dictionary<string, string>>(e.Data);
+            if (data.ContainsKey("l"))
+            {
+                btCtl[0] = 3;
+                btCtl[1] = Convert.ToByte(data["l"]);
+                btCtl[2] = Convert.ToByte(data["r"]);
+                btCtl[3] = unchecked((byte)~(btCtl[0] + btCtl[1] + btCtl[2]));
+                //SendToDevice(btCtl);
+            }
+            else if (data.ContainsKey("motor"))
+            {
+                var rt = bool.Parse(data["motor"]) ? 1 : 0;
+                var bt = new byte[] {
+                    1,
+                    (byte)rt,
+                    unchecked((byte)~(1 + rt))
+                };
+                SendToDevice(bt);
+            }
+            else if (data.ContainsKey("light"))
+            {
+            }
+
         }
     }
 }

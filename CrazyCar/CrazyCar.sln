@@ -5,6 +5,12 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrazyCar", "CrazyCar\CrazyCar.csproj", "{4F3FE3A4-BF2D-4540-B409-819EBF5F9407}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{FFC60009-29B2-404B-831C-45E16261F319}"
+	ProjectSection(SolutionItems) = preProject
+		..\CrazyCarWeb\controller.html = ..\CrazyCarWeb\controller.html
+		..\CrazyCarWeb\nipplejs.min.js = ..\CrazyCarWeb\nipplejs.min.js
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

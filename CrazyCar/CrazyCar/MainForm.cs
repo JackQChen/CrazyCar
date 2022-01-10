@@ -30,6 +30,8 @@ namespace CrazyCar
         {
             actLog = new Action<string>(log =>
             {
+                if (this.txtLog.Lines.Length > 100)
+                    this.txtLog.Clear();
                 this.txtLog.AppendText(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "\r\n" + log + "\r\n");
             });
             Task.Factory.StartNew(() =>
@@ -128,7 +130,7 @@ namespace CrazyCar
             {
                 service.SendToDevice = btArr =>
                 {
-                    SendControl(btArr);
+                    SendToDevice(btArr);
                 };
                 actSendToBrowser = btArr =>
                 {
@@ -155,7 +157,7 @@ namespace CrazyCar
             sendQueue.Add(btData);
         }
 
-        public void SendControl(byte[] btData)
+        public void SendToDevice(byte[] btData)
         {
             SendData(btData);
         }
@@ -164,13 +166,13 @@ namespace CrazyCar
 
         private void btnMotor_Click(object sender, EventArgs e)
         {
-            var data = new byte[] { 1, 0, unchecked((byte)~(1 + 0)) };
+            var data = new byte[] { 1, 1, unchecked((byte)~(1 + 1)) };
             SendData(data);
         }
 
         private void btnLight_Click(object sender, EventArgs e)
         {
-            var data = new byte[] { 2, 0, unchecked((byte)~(2 + 0)) };
+            var data = new byte[] { 2, 1, unchecked((byte)~(2 + 1)) };
             SendData(data);
         }
 

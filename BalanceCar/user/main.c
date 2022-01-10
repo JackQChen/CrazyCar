@@ -48,7 +48,7 @@ int main()
 			switch (BluetoothKeyHandle.KeyNum)
 			{
 			case CONTROL_MOTOR:
-				run_state = run_state == 0 ? 1 : 0;
+				run_state = BluetoothKeyHandle.Handle.Ch1Value;
 				LED1 = run_state;
 				break;
 			case CONTROL_LIGHT:

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -6,6 +6,7 @@
         Controller
     </title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <script src="nipplejs.min.js"></script>
     <script language="javascript" type="text/javascript">
         var webSocket;
         var _reconnect;
@@ -31,6 +32,78 @@
                 if (websocket.readyState != WebSocket.OPEN)
                     init();
             }, 10000);
+        }
+        function initControl() {
+            var posData = {
+                l: 0,
+                r: 0
+            };
+            var lastData = {
+                l: 0,
+                r: 0
+            };
+            setInterval(function () {
+                if (websocket.readyState == WebSocket.OPEN) {
+                    posData.l = parseInt(posData.l);
+                    posData.r = parseInt(posData.r);
+                    if (Math.abs(lastData.l - posData.l) > 0 || Math.abs(lastData.r - posData.r) > 0) {
+                        lastData.l = posData.l;
+                        lastData.r = posData.r;
+                        websocket.send(JSON.stringify(posData));
+                    }
+                }
+            }, 50);
+            var joystickL = nipplejs.create({
+                zone: document.getElementById('left'),
+                mode: 'static',
+                position: {
+                    left: '25%',
+                    top: '65%'
+                },
+                color: '#d0d0d0',
+                restOpacity: 1,
+                size: 100,
+                lockY: true
+            });
+            var nodeL = document.createElement("div");
+            nodeL.innerHTML = "<div class='menu'></div>";
+            joystickL[0].el.lastElementChild.append(nodeL);
+
+            var joystickR = nipplejs.create({
+                zone: document.getElementById('right'),
+                mode: 'static',
+                position: {
+                    left: '70%',
+                    top: '65%'
+                },
+                color: '#d0d0d0',
+                restOpacity: 1,
+                size: 100,
+                lockY: true
+            });
+            var nodeR = document.createElement("div");
+            nodeR.innerHTML = "<div class='menu'></div>";
+            joystickR[0].el.lastElementChild.append(nodeR);
+
+            joystickL.on('end',
+                function (evt, data) {
+                    posData.l = 0;
+                }).on('move',
+                    function (evt, data) {
+                        posData.l = (data.vector.y > 0 ? 1 : -1) * data.distance;
+                    });
+            joystickR.on('end',
+                function (evt, data) {
+                    posData.r = 0;
+                }).on('move',
+                    function (evt, data) {
+                        posData.r = (data.vector.y > 0 ? 1 : -1) * data.distance;
+                    });
+
+            var chkMotor = document.getElementById("chkMotor");
+            chkMotor.onchange = function () {
+                websocket.send(JSON.stringify({ 'motor': chkMotor.checked }));
+            };
         }
     </script>
     <style>
@@ -170,96 +243,32 @@
     </style>
 </head>
 
-<body onload="init();reconnect();">
+<body onload="init(); reconnect(); initControl();">
     <div id="left">
     </div>
     <div id="right">
     </div>
-    <script src="nipplejs.min.js">
-    </script>
-    <script>
-        var posData = {
-            l: 0,
-            r: 0
-        };
-        var lastData = {
-            l: 0,
-            r: 0
-        };
-        setInterval(function () {
-            if (websocket.readyState == WebSocket.OPEN) {
-                posData.l = parseInt(posData.l);
-                posData.r = parseInt(posData.r);
-                if (Math.abs(lastData.l - posData.l) > 0 || Math.abs(lastData.r - posData.r) > 0) {
-                    lastData.l = posData.l;
-                    lastData.r = posData.r;
-                    websocket.send(JSON.stringify(posData));
-                }
-            }
-        },
-            50);
-        var joystickL = nipplejs.create({
-            zone: document.getElementById('left'),
-            mode: 'static',
-            position: {
-                left: '25%',
-                top: '65%'
-            },
-            color: '#d0d0d0',
-            restOpacity: 1,
-            size: 100,
-            lockY: true
-        });
-        var nodeL = document.createElement("div");
-        nodeL.innerHTML = "<div class='menu'></div>";
-        joystickL[0].el.lastElementChild.append(nodeL);
-
-        var joystickR = nipplejs.create({
-            zone: document.getElementById('right'),
-            mode: 'static',
-            position: {
-                left: '70%',
-                top: '65%'
-            },
-            color: '#d0d0d0',
-            restOpacity: 1,
-            size: 100,
-            lockY: true
-        });
-        var nodeR = document.createElement("div");
-        nodeR.innerHTML = "<div class='menu'></div>";
-        joystickR[0].el.lastElementChild.append(nodeR);
-
-        joystickL.on('end',
-            function (evt, data) {
-                posData.l = 0;
-            }).on('move',
-                function (evt, data) {
-                    posData.l = (data.vector.y > 0 ? 1 : -1) * data.distance;
-                });
-        joystickR.on('end',
-            function (evt, data) {
-                posData.r = 0;
-            }).on('move',
-                function (evt, data) {
-                    posData.r = (data.vector.y > 0 ? 1 : -1) * data.distance;
-                });
-    </script>
-    <div style="
-        position: fixed;
-        top: 5%;
-        left: 5%;">
+    <div style="position: fixed;top: 5%;left: 5%;">
         <div id="txtLog">
         </div>
     </div>
-    <div style="position: fixed;top: 10%;width: 100%;display: flex;justify-content: center;">
-        <span style="float:left;margin:21px">
-            灯光
-        </span>
-        <input type="checkbox" id="chkLight">
-        <label style="float:left" class="slider" for="chkLight">
-        </label>
+    <div style="position: fixed;top: 10%;width: 100%;display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;grid-template-rows: 100%;">
+        <div style="grid-column: 2">
+            <span style="float:left;margin:21px">
+                开关
+            </span>
+            <input type="checkbox" id="chkMotor">
+            <label style="float:left" class="slider" for="chkMotor">
+            </label>
+        </div>
+        <div style="grid-column: 3">
+            <span style="float:left;margin:21px">
+                灯光
+            </span>
+            <input type="checkbox" id="chkLight">
+            <label style="float:left" class="slider" for="chkLight">
+            </label>
+        </div>
     </div>
 </body>
-
 </html>
