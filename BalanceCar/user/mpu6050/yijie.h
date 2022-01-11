@@ -9,8 +9,8 @@
 //校准值
 #define  GX_JIAO  50  	//陀螺仪X的校准值
 #define  GY_JIAO  3   	//陀螺仪Y的校准值
-#define  GZ_JIAO  30  	//陀螺仪Z的校准值
-#define  GPitch_JIAO  -4.6  	//陀螺仪Pitch的校准值
+#define  GZ_JIAO  35  	//陀螺仪Z的校准值
+#define  GPitch_JIAO  -4.3  	//陀螺仪Pitch的校准值
 #define  GRoll_JIAO  0  	//陀螺仪Roll的校准值
 
 extern signed short Gyro_X;
