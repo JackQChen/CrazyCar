@@ -66,7 +66,6 @@ static int speed_lvbo(int moto1, int moto2)
 	u8  i = 0;
 	int Sum_Speed = 0;
 
-
 	for (i = 1; i < SPEED_COUNT; i++)
 	{
 		CtrParam.SpeedFilterBuf[i - 1] = CtrParam.SpeedFilterBuf[i];
@@ -180,21 +179,18 @@ void crt()
 	angle_out = up_right(S_Pitch);	//角度控制
 	speed_out = clr_speed(CtrParam.MotorSpeed_L, CtrParam.MotorSpeed_R);//速度控制
 	trun_out = clr_trun(Zgyro);//转向控制
-	
-	if (SysParam.RemoteMode == REMOTE_MODE_APP)
+
+	if (BluetoothKeyHandle.Handle.Ch3Value > 100)
 	{
-		if (BluetoothKeyHandle.Handle.Ch3Value > 100)
-		{
-			CtrParam.MotorSpeed_L = angle_out + speed_out - trun_out;
-			CtrParam.MotorSpeed_R = angle_out + speed_out;//- trun_out;			
-		}
-		else
-		{
-			CtrParam.MotorSpeed_L = angle_out + speed_out;// - trun_out;
-			CtrParam.MotorSpeed_R = angle_out + speed_out - trun_out;
-		}
+		CtrParam.MotorSpeed_L = angle_out + speed_out - trun_out;
+		CtrParam.MotorSpeed_R = angle_out + speed_out;//- trun_out;			
 	}
-	
+	else
+	{
+		CtrParam.MotorSpeed_L = angle_out + speed_out;// - trun_out;
+		CtrParam.MotorSpeed_R = angle_out + speed_out - trun_out;
+	}
+
 	//限制速度
 	CtrParam.MotorSpeed_L = limit_speed_out(CtrParam.MotorSpeed_L, 6000);
 	CtrParam.MotorSpeed_R = limit_speed_out(CtrParam.MotorSpeed_R, 6000);

@@ -50,6 +50,10 @@ int main()
 			case CONTROL_MOTOR:
 				run_state = BluetoothKeyHandle.Handle.Ch1Value;
 				LED1 = run_state;
+				if (run_state == 0)
+					printf("Device is powered off.\n");
+				else
+					printf("Device is powered on. Voltage=%.2fv\n", (float)btv / 1000);
 				break;
 			case CONTROL_LIGHT:
 				break;
@@ -65,7 +69,7 @@ int main()
 		up_angle();
 		//发给上位机，查看姿态
 		//if (Mcount % 100 == 0)
-		//	printf("Pitch:%3.2f\n",S_Pitch);
+		//	printf("Pitch:%.2f\n",S_Pitch);
 
 #if 1
 	//平衡小车控制-----------------------------------------
