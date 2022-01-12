@@ -83,6 +83,8 @@ namespace CrazyCar
                                 strBuffer.Append(strFull.Substring(lastIndex + 1));
                             }
                         }
+                        else
+                            Thread.Sleep(10);
                     }
                     catch (Exception ex)
                     {
