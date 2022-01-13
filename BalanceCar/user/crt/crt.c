@@ -180,8 +180,8 @@ void crt()
 	speed_out = clr_speed(CtrParam.MotorSpeed_L, CtrParam.MotorSpeed_R);//速度控制
 	trun_out = clr_trun(Zgyro);//转向控制
 
-	CtrParam.MotorSpeed_L = angle_out + speed_out - trun_out + BluetoothKeyHandle.Handle.Ch1Value;
-	CtrParam.MotorSpeed_R = angle_out + speed_out - trun_out + BluetoothKeyHandle.Handle.Ch2Value;
+	CtrParam.MotorSpeed_L = angle_out - speed_out + trun_out + BluetoothKeyHandle.Handle.Ch1Value;
+	CtrParam.MotorSpeed_R = angle_out - speed_out - trun_out + BluetoothKeyHandle.Handle.Ch2Value;
 
 	//限制速度
 	CtrParam.MotorSpeed_L = limit_speed_out(CtrParam.MotorSpeed_L, 6000);

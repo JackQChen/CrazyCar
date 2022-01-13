@@ -105,7 +105,7 @@ int main()
 			up_btv();
 			//printf("V:%d\r\n",btv);	
 			//低电压检测，低于7V报警
-			if (btv < 7000)
+			if (btv < 6000)
 			{
 				//排除调试模式
 				if (btv > 5000)
