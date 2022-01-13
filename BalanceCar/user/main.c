@@ -4,8 +4,24 @@
 #include <math.h>
 #include "Common.h"
 
-u8 run_state = 0;			//小车控制标志
+u8 run_state = 0;		//小车控制标志
 u32 Mcount = 0;			//计数
+
+void update_state(u8 state)
+{
+	if (state == 0)
+	{
+		ClearCtrParam();
+		A4988_en(1);
+		run_state = 0;
+	}
+	else
+	{
+		A4988_en(0);
+		run_state = 1;
+	}
+	LED1 = !run_state;
+}
 
 int main()
 {
@@ -14,7 +30,7 @@ int main()
 	LED_init('C', 14);
 	LED_init('A', 4);	//LED初始化 
 
-	LED1 = 1;
+	LED1 = 0;
 
 	serial1_init(9600);		//调试使用
 
@@ -34,13 +50,12 @@ int main()
 		delay_ms(50);
 	}
 
-	LED1 = 0;
+	LED1 = 1;
 	printf("Initialization complete.\n");
 	SysParam.RemoteMode = REMOTE_MODE_APP; 			//设置遥控模式为应用
 
 	while (1)
 	{
-		u8 sta = 0;
 		delay_ms(10);
 
 		if (Uart.RxState == UART_RX_OK)	//接收到应用数据
@@ -48,8 +63,7 @@ int main()
 			switch (BluetoothKeyHandle.KeyNum)
 			{
 			case CONTROL_MOTOR:
-				run_state = BluetoothKeyHandle.Handle.Ch1Value;
-				LED1 = run_state;
+				update_state(BluetoothKeyHandle.Handle.Ch1Value);
 				if (run_state == 0)
 					printf("Device is powered off.\n");
 				else
@@ -64,62 +78,42 @@ int main()
 			}
 			Uart.RxState = UART_RX_READY;
 		}
-		//更新姿态,如果更换了mpu6050，请在这里面校准
+		//更新姿态,如果更换了mpu6050，请校准
 		up_angle();
 		//发给上位机，查看姿态
 		//if (Mcount % 100 == 0)
 		//	printf("Pitch:%.2f\n",S_Pitch);
 
 #if 1
-	//平衡小车控制-----------------------------------------
-		if (run_state == 0 || S_Pitch > 45 || S_Pitch < -45)
-		{
-			if (run_state == 1)
-			{
-				run_state = 0;
-				LED1 = 0;
-				ClearCtrParam();
-			}
-			A4988_en(1);
-		}
-		else
-		{
-			crt();				//所有小车的控制-----------------------------------
-			A4988_en(0);
-		}
+
+		if (run_state == 1 && (S_Pitch > 45 || S_Pitch < -45))
+			update_state(0);
+		//平衡小车控制
+		if (run_state == 1)
+			crt();
 #endif	
 
-		//更新按键，10*5ms=50ms-----------------------------
+		//更新按键，10*10ms=100ms
 		if (Mcount % 10 == 0)
 		{
-			sta = up_key();
-			if (sta == 1)
-			{
-				if (run_state == 0)
-				{
-					run_state = 1;
-					LED1 = 1;
-				}
-				else
-				{
-					run_state = 0;
-					LED1 = 0;
-					ClearCtrParam();
-				}
-			}
+			if (up_key() == 1)
+				update_state(!run_state);
 		}
-		//更新电池，100*5ms=500ms-----------------------------
+		//更新电池，100*10ms=1s
 		if (Mcount % 100 == 0)
 		{
 			up_btv();
-			//	printf("V:%d\r\n",btv);	
-			//低电压检测，低于7V报警------------------------------------
+			//printf("V:%d\r\n",btv);	
+			//低电压检测，低于7V报警
 			if (btv < 7000)
 			{
-				if (btv < 7000 && btv>5000) LED1 = !LED1;
+				//排除调试模式
+				if (btv > 5000)
+					LED1 = !LED1;
 			}
 		}
-		if (Mcount >= 400) Mcount = 0;
+		if (Mcount >= 400)
+			Mcount = 0;
 		Mcount++;
 	}
 }
