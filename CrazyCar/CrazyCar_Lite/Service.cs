@@ -22,16 +22,20 @@ namespace CrazyCar
             };
         }
 
-        byte[] btCtl = new byte[4];
+        byte[] btCtl = new byte[6];
         protected override void OnMessage(WebSocketSharp.MessageEventArgs e)
         {
             var data = convert.Deserialize<Dictionary<string, string>>(e.Data);
             if (data.ContainsKey("l"))
             {
                 btCtl[0] = 3;
-                btCtl[1] = Convert.ToByte(data["l"]);
-                btCtl[2] = Convert.ToByte(data["r"]);
-                btCtl[3] = unchecked((byte)~(btCtl[0] + btCtl[1] + btCtl[2]));
+                var bt = BitConverter.GetBytes(Convert.ToInt16(data["l"]));
+                btCtl[1] = bt[1];
+                btCtl[2] = bt[0];
+                bt = BitConverter.GetBytes(Convert.ToInt16(data["r"]));
+                btCtl[3] = bt[1];
+                btCtl[4] = bt[0];
+                btCtl[5] = unchecked((byte)~(btCtl[0] + btCtl[1] + btCtl[2] + btCtl[3] + btCtl[4]));
                 SendToDevice(btCtl);
             }
             else if (data.ContainsKey("motor"))

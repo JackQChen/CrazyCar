@@ -90,14 +90,14 @@
                     posData.l = 0;
                 }).on('move',
                     function (evt, data) {
-                        posData.l = (data.vector.y > 0 ? 1 : -1) * data.distance;
+                        posData.l = (data.vector.y > 0 ? 1 : 0) * data.distance * 40;
                     });
             joystickR.on('end',
                 function (evt, data) {
                     posData.r = 0;
                 }).on('move',
                     function (evt, data) {
-                        posData.r = (data.vector.y > 0 ? 1 : -1) * data.distance;
+                        posData.r = (data.vector.y > 0 ? 1 : 0) * data.distance * 40;
                     });
 
             var chkMotor = document.getElementById("chkMotor");

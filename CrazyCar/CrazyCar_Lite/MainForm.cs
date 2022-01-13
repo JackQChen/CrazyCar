@@ -94,12 +94,12 @@ namespace CrazyCar
             {
                 serialPort = new SerialPort("/dev/ttyAMA0", 9600);
                 serialPort.Open();
+                Log("SerialPort initialization complete");
             }
             catch
             {
                 Log("SerialPort init failed");
             }
-            Log("SerialPort initialization complete");
             server = new HttpServer(9527);
             server.DocumentRootPath = AppDomain.CurrentDomain.BaseDirectory;
             server.OnGet += (s, a) =>
