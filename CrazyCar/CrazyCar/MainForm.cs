@@ -126,7 +126,8 @@ namespace CrazyCar
                     res.ContentType = "application/javascript";
                     res.ContentEncoding = Encoding.UTF8;
                 }
-                res.WriteContent(contents);
+                res.ContentLength64 = contents.LongLength;
+                res.Close(contents, true);
             };
             server.AddWebSocketService<Service>("/", service =>
             {
