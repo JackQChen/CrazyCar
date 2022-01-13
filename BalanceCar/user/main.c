@@ -58,9 +58,8 @@ int main()
 			case CONTROL_LIGHT:
 				break;
 			case CONTROL_CONTROL:
+				printf("L=%d R=%d\n", BluetoothKeyHandle.Handle.Ch1Value, BluetoothKeyHandle.Handle.Ch2Value);
 				cha1 = 0;
-				CtrParam.RunSpeed = (BluetoothKeyHandle.Handle.Ch1Value - 100) * 20;
-				CtrParam.TurnSpeed = (BluetoothKeyHandle.Handle.Ch2Value - 100) * 20;
 				break;
 			}
 			Uart.RxState = UART_RX_READY;

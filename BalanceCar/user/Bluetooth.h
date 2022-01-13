@@ -25,10 +25,10 @@ typedef struct  tagKeyHandleValue
 	u8 KeyNum;			//°´¼üÖµ
 	struct
 	{ 
-	  u8 Ch1Value;
-	  u8 Ch2Value;
-	  u8 Ch3Value;
-	  u8 Ch4Value;
+	  int Ch1Value;
+	  int Ch2Value;
+	  int Ch3Value;
+	  int Ch4Value;
 	} Handle;
 }strBluetoothKeyHandle;
 

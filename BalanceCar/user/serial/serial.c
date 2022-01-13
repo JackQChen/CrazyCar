@@ -261,7 +261,7 @@ u8 get_length(u8 control)
 	case CONTROL_LIGHT:
 		return 2;
 	case CONTROL_CONTROL:
-		return 5;
+		return 3;
 	}
 	return 0;
 }
@@ -275,8 +275,8 @@ void process_data(u8 control)
 		BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
 		break;
 	case CONTROL_CONTROL:
-		BluetoothKeyHandle.Handle.Ch1Value = dataArray[1];
-		BluetoothKeyHandle.Handle.Ch1Value = dataArray[2];
+		BluetoothKeyHandle.Handle.Ch1Value = dataArray[1]*10;
+		BluetoothKeyHandle.Handle.Ch2Value = dataArray[2]*10;
 		break;
 	}
 }

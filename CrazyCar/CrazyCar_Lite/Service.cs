@@ -32,7 +32,7 @@ namespace CrazyCar
                 btCtl[1] = Convert.ToByte(data["l"]);
                 btCtl[2] = Convert.ToByte(data["r"]);
                 btCtl[3] = unchecked((byte)~(btCtl[0] + btCtl[1] + btCtl[2]));
-                //SendToDevice(btCtl);
+                SendToDevice(btCtl);
             }
             else if (data.ContainsKey("motor"))
             {
