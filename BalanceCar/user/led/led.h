@@ -7,6 +7,6 @@
 #define LED1 PAout(4)	// 
 
 
-void LED_init(char GP,int IO);
+void LED_init(char GP, int IO);
 
 #endif
