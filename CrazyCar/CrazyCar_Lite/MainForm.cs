@@ -4,15 +4,12 @@ using System.IO.Ports;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WebSocketSharp;
-using WebSocketSharp.Net;
-using WebSocketSharp.Server;
 
 namespace CrazyCar
 {
     public class MainForm
     {
-        HttpServer server;
+        Service server;
         SerialPort serialPort;
         BlockingCollection<byte[]> sendQueue = new BlockingCollection<byte[]>();
         Action<string> actLog;
@@ -100,46 +97,17 @@ namespace CrazyCar
             {
                 Log("SerialPort init failed");
             }
-            server = new HttpServer(9527);
-            server.DocumentRootPath = AppDomain.CurrentDomain.BaseDirectory;
-            server.OnGet += (s, a) =>
+            server = new Service();
+            server.SendToDevice = btArr =>
             {
-                var req = a.Request;
-                var res = a.Response;
-                var path = req.RawUrl;
-                if (path == "/")
-                    path += "index.html";
-                byte[] contents;
-                if (!a.TryReadFile(path, out contents))
-                {
-                    res.StatusCode = (int)HttpStatusCode.NotFound;
-                    return;
-                }
-                if (path.EndsWith(".html"))
-                {
-                    res.ContentType = "text/html";
-                    res.ContentEncoding = Encoding.UTF8;
-                }
-                else if (path.EndsWith(".js"))
-                {
-                    res.ContentType = "application/javascript";
-                    res.ContentEncoding = Encoding.UTF8;
-                }
-                res.ContentLength64 = contents.LongLength;
-                res.Close(contents, true);
+                SendToDevice(btArr);
             };
-            server.AddWebSocketService<Service>("/", service =>
+            actSendToBrowser = btArr =>
             {
-                service.SendToDevice = btArr =>
-                {
-                    SendToDevice(btArr);
-                };
-                actSendToBrowser = btArr =>
-                {
-                    service.SendToBrowser(btArr);
-                };
-                Log("WebSocket connected.");
-            });
+                server.SendToBrowser(btArr);
+            };
+            server.Endpoint.Port = 9527;
+            server.Initialize();
             server.Start();
         }
 
