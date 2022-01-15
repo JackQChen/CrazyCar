@@ -17,6 +17,7 @@ namespace CrazyCar
                 if (cmd == "q")
                 {
                     frm.MainForm_FormClosing(null);
+                    Console.WriteLine("Program stopped.");
                     break;
                 }
             }

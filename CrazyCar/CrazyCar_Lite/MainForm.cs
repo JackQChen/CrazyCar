@@ -41,7 +41,8 @@ namespace CrazyCar
                     }
                     catch (Exception ex)
                     {
-                        Log(ex.StackTrace + "\r\n" + ex.Message);
+                        if (ex as ThreadAbortException == null)
+                            Log(ex.StackTrace + "\r\n" + ex.Message);
                     }
                 }
             });
@@ -83,7 +84,8 @@ namespace CrazyCar
                     }
                     catch (Exception ex)
                     {
-                        Log(ex.StackTrace + "\r\n" + ex.Message);
+                        if (ex as ThreadAbortException == null)
+                            Log(ex.StackTrace + "\r\n" + ex.Message);
                     }
                 }
             });

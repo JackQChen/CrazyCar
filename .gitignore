@@ -293,3 +293,5 @@ __pycache__/
 # tools/**
 # !tools/packages.config
 
+BalanceCar/template.uvguix.Ace
+BalanceCar/Listings/template.map
