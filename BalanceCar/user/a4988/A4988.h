@@ -10,8 +10,8 @@ extern  u16 CCR2_Val;
 #define MAX_FREQ   65535
 #define MIN_FREQ   1
 
-#define RDIR  PAout(5)
-#define LDIR  PBout(0)
+#define LDIR  PAout(5)
+#define RDIR  PBout(0)
 
 //1停止
 #define LEN   PAout(7)

@@ -14,8 +14,8 @@ u8 genshui_state = 0;		//跟随模式变量 ，默认关闭
 //车轮转向处理
 static void lun_dir(short left_motor, short right_motor)
 {
-	LDIR = left_motor >= 0 ? 1 : 0;
-	RDIR = right_motor >= 0 ? 0 : 1;
+	LDIR = left_motor > 0 ? 0 : 1;
+	RDIR = right_motor > 0 ? 1 : 0;
 }
 
 //输出线性化
@@ -176,8 +176,8 @@ void crt()
 	speed_out = clr_speed(CtrParam.MotorSpeed_L, CtrParam.MotorSpeed_R);//速度控制
 	trun_out = clr_trun(Zgyro);//转向控制
 
-	CtrParam.MotorSpeed_L = angle_out + speed_out + trun_out + BluetoothKeyHandle.Handle.Ch1Value;
-	CtrParam.MotorSpeed_R = angle_out + speed_out - trun_out + BluetoothKeyHandle.Handle.Ch2Value;
+	CtrParam.MotorSpeed_L = angle_out + speed_out - trun_out + BluetoothKeyHandle.Handle.Ch1Value;
+	CtrParam.MotorSpeed_R = angle_out + speed_out + trun_out + BluetoothKeyHandle.Handle.Ch2Value;
 
 	//限制速度
 	CtrParam.MotorSpeed_L = limit_speed_out(CtrParam.MotorSpeed_L, 6000);
@@ -187,8 +187,8 @@ void crt()
 
 	//车轮方向
 	lun_dir(CtrParam.MotorSpeed_L, CtrParam.MotorSpeed_R);
-	sl = CtrParam.MotorSpeed_L * (CtrParam.MotorSpeed_L > 0 ? 1 : -1);
-	sr = CtrParam.MotorSpeed_R * (CtrParam.MotorSpeed_R > 0 ? 1 : -1);
+	sl = CtrParam.MotorSpeed_L > 0 ? CtrParam.MotorSpeed_L : -CtrParam.MotorSpeed_L;
+	sr = CtrParam.MotorSpeed_R > 0 ? CtrParam.MotorSpeed_R : -CtrParam.MotorSpeed_R;
 
 	//输出线性化
 	sl = out_linear(sl);

@@ -93,11 +93,11 @@ namespace CrazyCar
             {
                 serialPort = new SerialPort("/dev/ttyAMA0", 9600);
                 serialPort.Open();
-                Log("SerialPort initialization complete");
+                Log("SerialPort initialization complete.");
             }
             catch
             {
-                Log("SerialPort init failed");
+                Log("SerialPort init failed.");
             }
             server = new Service();
             server.SendToDevice = btArr =>
